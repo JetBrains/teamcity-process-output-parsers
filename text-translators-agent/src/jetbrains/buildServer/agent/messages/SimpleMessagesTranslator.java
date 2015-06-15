@@ -42,13 +42,15 @@ public interface SimpleMessagesTranslator {
    * Result is either:
    * <ul>
    * <li/>SKIP (not matched by this translator),
-   * <li/>KEEP_ORIGIN (matched, nothing should be changed) or
-   * <li/>REPLACE (matched, message should be replaced)
+   * <li/>KEEP_ORIGIN (matched, nothing should be changed),
+   * <li/>REPLACE (matched, message should be replaced) or
+   * <li/>EAT (matched, message replaced with nothing)
    * </ul>
    */
   final class Result {
     public static final Result SKIP = new Result(false, true, Collections.<BuildMessage1>emptyList());
     public static final Result KEEP_ORIGIN = new Result(true, true, Collections.<BuildMessage1>emptyList());
+    public static final Result EAT = new Result(true, false, Collections.<BuildMessage1>emptyList());
     private final boolean consumed;
     private final boolean keep;
     private final List<BuildMessage1> messages;

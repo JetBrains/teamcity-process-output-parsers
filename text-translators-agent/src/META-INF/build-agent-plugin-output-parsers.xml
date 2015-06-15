@@ -20,6 +20,13 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
        default-autowire="constructor"
     >
+  <!-- Utility -->
+  <bean class="jetbrains.buildServer.agent.impl.CurrentBuildRunnerTrackerImpl"/>
+
+  <!-- Text translators EP -->
   <bean class="jetbrains.buildServer.agent.messages.TextBuildMessagesTranslator"/>
   <bean class="jetbrains.buildServer.agent.messages.TranslatorsRegistryImpl"/>
+
+  <!-- Regex translators -->
+  <bean class="jetbrains.buildServer.agent.messages.regex.RegexParsersTranslatorsRegistryManipulator"/>
 </beans>

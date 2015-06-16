@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,16 @@ public class ParserLoader {
   @Nullable
   public static RegexParser loadParser(@NotNull final String configResourceName, @NotNull final Class clazz) {
     final InputStream parserConfigStream = clazz.getResourceAsStream(configResourceName);
+    if (parserConfigStream == null) {
+      LOG.warn("Specified parser configuration resource not found (" + configResourceName + ")");
+      return null;
+    }
+    return loadParser(parserConfigStream);
+  }
+
+  @Nullable
+  public static RegexParser loadParser(@NotNull final String configResourceName, @NotNull final ClassLoader classLoader) {
+    final InputStream parserConfigStream = classLoader.getResourceAsStream(configResourceName);
     if (parserConfigStream == null) {
       LOG.warn("Specified parser configuration resource not found (" + configResourceName + ")");
       return null;

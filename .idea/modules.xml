@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/process-output-parsers.iml" filepath="$PROJECT_DIR$/process-output-parsers.iml" />
       <module fileurl="file://$PROJECT_DIR$/regex-parser/regex-parser.iml" filepath="$PROJECT_DIR$/regex-parser/regex-parser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/text-translators-agent/text-translators-agent.iml" filepath="$PROJECT_DIR$/text-translators-agent/text-translators-agent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/text-translators-test/text-translators-test.iml" filepath="$PROJECT_DIR$/text-translators-test/text-translators-test.iml" />
     </modules>
   </component>
 </project>

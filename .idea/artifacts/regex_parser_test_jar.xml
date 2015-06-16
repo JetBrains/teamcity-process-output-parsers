@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="regex-parser-test:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/regex_parser_test_jar</output-path>
+    <root id="archive" name="regex-parser-test.jar">
+      <element id="module-test-output" name="regex-parser" />
+    </root>
+  </artifact>
+</component>

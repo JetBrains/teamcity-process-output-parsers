@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/process-output-parsers.iml" filepath="$PROJECT_DIR$/process-output-parsers.iml" />
+      <module fileurl="file://$PROJECT_DIR$/regex-parser/regex-parser.iml" filepath="$PROJECT_DIR$/regex-parser/regex-parser.iml" />
     </modules>
   </component>
 </project>

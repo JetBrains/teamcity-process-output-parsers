@@ -18,7 +18,7 @@
 <teamcity-plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xsi:noNamespaceSchemaLocation="urn:schemas-jetbrains-com:teamcity-plugin-v1-xml">
   <info>
-    <name>output-parsers</name>
+    <name>process-output-parsers</name>
     <display-name>Framework for process output parsers</display-name>
     <version>@Plugin_Version@</version>
     <vendor>

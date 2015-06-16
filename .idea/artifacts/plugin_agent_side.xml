@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact name="plugin-agent-side">
+    <output-path>$PROJECT_DIR$/out/artifacts/plugin_agent_side</output-path>
+    <root id="root">
+      <element id="archive" name="process-output-parsers.zip">
+        <element id="directory" name="lib">
+          <element id="artifact" artifact-name="regex-parser:jar" />
+          <element id="artifact" artifact-name="text-translators-agent:jar" />
+        </element>
+        <element id="file-copy" path="$PROJECT_DIR$/text-translators-agent/teamcity-agent-plugin.xml" output-file-name="teamcity-plugin.xml" />
+      </element>
+    </root>
+  </artifact>
+</component>

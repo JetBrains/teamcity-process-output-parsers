@@ -25,7 +25,7 @@ import java.util.Stack;
  */
 public class ParserManager<T extends ParserManager.Block> extends LoggerAdapter {
   @NotNull
-  protected final Logger myLogger;
+  private final Logger myLogger;
   @NotNull
   protected final Stack<T> myBlocksStack = new Stack<T>();
 

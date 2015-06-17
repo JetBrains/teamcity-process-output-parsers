@@ -44,9 +44,9 @@ public class RegexParsersTranslatorsRegistryManipulator {
   private final ParserManager myDefaultParsersManager;
   private final Map<String, RegexParserToSimpleMessagesTranslatorAdapter> myRegisteredTranslators;
 
-  public RegexParsersTranslatorsRegistryManipulator(@NotNull TranslatorsRegistry translatorsRegistry,
-                                                    @NotNull ServiceMessagesRegister serviceMessagesRegister,
-                                                    @NotNull CurrentBuildRunnerTracker currentBuildRunnerTracker) {
+  public RegexParsersTranslatorsRegistryManipulator(@NotNull final TranslatorsRegistry translatorsRegistry,
+                                                    @NotNull final ServiceMessagesRegister serviceMessagesRegister,
+                                                    @NotNull final CurrentBuildRunnerTracker currentBuildRunnerTracker) {
     myTranslatorsRegistry = translatorsRegistry;
     myCurrentBuildRunnerTracker = currentBuildRunnerTracker;
 
@@ -71,7 +71,7 @@ public class RegexParsersTranslatorsRegistryManipulator {
     myRegisteredTranslators = new HashMap<String, RegexParserToSimpleMessagesTranslatorAdapter>();
   }
 
-  private void doUnregisterParser(RegexParsersCommand command) {
+  private void doUnregisterParser(@NotNull final RegexParsersCommand command) {
     final String name = command.getName();
     // Unregister from translators
     final RegexParserToSimpleMessagesTranslatorAdapter translator = myRegisteredTranslators.get(name);
@@ -80,7 +80,7 @@ public class RegexParsersTranslatorsRegistryManipulator {
     }
   }
 
-  public void register(RegexParsersCommand command) {
+  public void register(@NotNull final RegexParsersCommand command) {
     RegexParser parser = null;
     if (command.getResourcePath() != null) {
       final String path = command.getResourcePath();
@@ -126,7 +126,7 @@ public class RegexParsersTranslatorsRegistryManipulator {
     myTranslatorsRegistry.register(adapter);
   }
 
-  public void unregister(@NotNull RegexParserToSimpleMessagesTranslatorAdapter adapter) {
+  public void unregister(@NotNull final RegexParserToSimpleMessagesTranslatorAdapter adapter) {
     myTranslatorsRegistry.unregister(adapter);
   }
 }

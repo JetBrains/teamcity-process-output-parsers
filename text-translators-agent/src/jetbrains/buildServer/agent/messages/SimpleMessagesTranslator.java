@@ -61,7 +61,7 @@ public interface SimpleMessagesTranslator {
       this.messages = messages;
     }
 
-    public static Result REPLACE(List<BuildMessage1> messages) {
+    public static Result REPLACE(@NotNull final List<BuildMessage1> messages) {
       return new Result(true, false, messages);
     }
 

@@ -33,7 +33,7 @@ public class KeepMessagesLogger extends BaseServerLoggerFacade {
   }
 
   @Override
-  protected void log(BuildMessage1 buildMessage1) {
+  protected void log(final BuildMessage1 buildMessage1) {
     myUnprocessedMessages.add(buildMessage1);
   }
 

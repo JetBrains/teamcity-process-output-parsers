@@ -16,6 +16,8 @@
 
 package jetbrains.buildServer.agent.messages;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -24,12 +26,12 @@ public class TranslatorsRegistryImpl implements TranslatorsRegistry {
   private final List<SimpleMessagesTranslator> mySimpleMessagesTranslators = new CopyOnWriteArrayList<SimpleMessagesTranslator>();
 
   @Override
-  public void register(SimpleMessagesTranslator translator) {
+  public void register(@NotNull final SimpleMessagesTranslator translator) {
     mySimpleMessagesTranslators.add(translator);
   }
 
   @Override
-  public void unregister(SimpleMessagesTranslator translator) {
+  public void unregister(@NotNull final SimpleMessagesTranslator translator) {
     mySimpleMessagesTranslators.remove(translator);
   }
 

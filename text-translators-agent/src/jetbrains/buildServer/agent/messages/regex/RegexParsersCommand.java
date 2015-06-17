@@ -69,7 +69,7 @@ public class RegexParsersCommand {
 //}
 
 
-  private RegexParsersCommand(String file, String scope, String name, String argument, String resourcePath) {
+  private RegexParsersCommand(final String file, final String scope, final String name, final String argument, final String resourcePath) {
     myFile = file;
     myScope = scope;
     myName = name;
@@ -77,15 +77,15 @@ public class RegexParsersCommand {
     myResourcePath = resourcePath;
   }
 
-  public static RegexParsersCommand fromFile(String file) {
+  public static RegexParsersCommand fromFile(@NotNull final String file) {
     return new RegexParsersCommand(file, null, null, null, null);
   }
 
-  public static RegexParsersCommand fromName(String name) {
+  public static RegexParsersCommand fromName(@NotNull final String name) {
     return new RegexParsersCommand(null, name, null, null, null);
   }
 
-  public static RegexParsersCommand fromResource(String resourcePath) {
+  public static RegexParsersCommand fromResource(@NotNull final String resourcePath) {
     return new RegexParsersCommand(null, null, null, null, resourcePath);
   }
 

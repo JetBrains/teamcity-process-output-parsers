@@ -148,7 +148,7 @@ public class TextBuildMessagesTranslator implements BuildMessagesTranslator {
   }
 
   @NotNull
-  private List<SimpleMessagesTranslator> getAllTranslators(AgentRunningBuildEx build) {
+  private List<SimpleMessagesTranslator> getAllTranslators(@NotNull final AgentRunningBuildEx build) {
     final BuildRunnerContext runnerContext = myActiveRunner.get();
     final List<SimpleMessagesTranslator> simpleMessagesTranslators = new ArrayList<SimpleMessagesTranslator>();
     if (runnerContext != null) {

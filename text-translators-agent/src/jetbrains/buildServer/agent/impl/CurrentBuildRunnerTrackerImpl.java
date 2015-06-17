@@ -42,12 +42,12 @@ public class CurrentBuildRunnerTrackerImpl extends AgentLifeCycleAdapter impleme
   }
 
   @Override
-  public void beforeRunnerStart(@NotNull BuildRunnerContext runner) {
+  public void beforeRunnerStart(@NotNull final BuildRunnerContext runner) {
     myRunningBuildRunner = runner;
   }
 
   @Override
-  public void runnerFinished(@NotNull BuildRunnerContext runner, @NotNull BuildFinishedStatus status) {
+  public void runnerFinished(@NotNull final BuildRunnerContext runner, @NotNull final BuildFinishedStatus status) {
     myRunningBuildRunner = null;
   }
 }

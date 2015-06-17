@@ -31,9 +31,9 @@ public class RegexParserToSimpleMessagesTranslatorAdapter implements SimpleMessa
   private final ParserManager myManager;
   private final KeepMessagesLogger myLogger;
 
-  public RegexParserToSimpleMessagesTranslatorAdapter(@NotNull RegexParser parser,
-                                                      @NotNull ParserManager manager,
-                                                      @NotNull KeepMessagesLogger logger) {
+  public RegexParserToSimpleMessagesTranslatorAdapter(@NotNull final RegexParser parser,
+                                                      @NotNull final ParserManager manager,
+                                                      @NotNull final KeepMessagesLogger logger) {
     myParser = parser;
     myManager = manager;
     myLogger = logger;
@@ -44,12 +44,12 @@ public class RegexParserToSimpleMessagesTranslatorAdapter implements SimpleMessa
   }
 
   @Override
-  public Result doProcessMessage(@NotNull ServiceMessage message, @NotNull BuildLogTail tail) {
+  public Result doProcessMessage(@NotNull final ServiceMessage message, @NotNull final BuildLogTail tail) {
     return Result.SKIP;
   }
 
   @Override
-  public Result doProcessText(@NotNull String text, @NotNull BuildLogTail tail) {
+  public Result doProcessText(@NotNull final String text, @NotNull final BuildLogTail tail) {
     final List<BuildMessage1> messages;
     final boolean consumed;
     synchronized (this) {

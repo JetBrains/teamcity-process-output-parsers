@@ -70,7 +70,7 @@ public class ParsersRegistryImplTest extends RunnerTest2Base {
 
   @Test
   public void testRegisterCommandProcessed() throws Throwable {
-    @Language("Bash") final String script = "echo \"##teamcity[RegexMessageTranslator.Enable resource='simple-parser.xml']\"\n" +
+    @Language("Bash") final String script = "echo \"##teamcity[RegexMessageParser.Enable resource='simple-parser.xml']\"\n" +
         "sleep 10s\n" +
         "echo \"Should be matched by simple parser\" 1>&2\n" +
         "echo \"END\"";

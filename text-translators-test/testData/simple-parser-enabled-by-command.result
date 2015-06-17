@@ -1,2 +1,2 @@
-  ##teamcity[RegexMessageTranslator.Enable resource='simple-parser.xml'] NORMAL
+  ##teamcity[RegexMessageParser.Enable resource='simple-parser.xml'] NORMAL
   Should be matched by simple parser NORMAL

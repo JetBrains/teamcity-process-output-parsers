@@ -25,9 +25,9 @@ import static com.intellij.openapi.util.text.StringUtil.isEmptyOrSpaces;
 
 /**
  * Service Messages controlling Regex Translators:
- * 'RegexMessageTranslator.Add'
- * 'RegexMessageTranslator.Remove'
- * 'RegexMessageTranslator.Reset'
+ * 'RegexMessageParser.Add'
+ * 'RegexMessageParser.Remove'
+ * 'RegexMessageParser.Reset'
  * <p/>
  * Attributes:
  * 'file' - path to parser config file
@@ -38,7 +38,7 @@ import static com.intellij.openapi.util.text.StringUtil.isEmptyOrSpaces;
  * Scope is either 'Build' or 'Runner' (case ignored)
  */
 public abstract class ParserCommand {
-  private static final String PREFIX = "RegexMessageTranslator.";
+  private static final String PREFIX = "RegexMessageParser.";
   public static final String COMMAND_ENABLE = PREFIX + "Enable";
   public static final String COMMAND_DISABLE = PREFIX + "Disable";
   public static final String COMMAND_RESET = PREFIX + "Reset";
@@ -180,6 +180,7 @@ public abstract class ParserCommand {
   }
 
   public static ParserCommand fromSM(@NotNull final ServiceMessage message) {
+    final Map<String, String> attributes = message.getAttributes();
     final String command = message.getMessageName();
     assert command.startsWith(PREFIX);
 

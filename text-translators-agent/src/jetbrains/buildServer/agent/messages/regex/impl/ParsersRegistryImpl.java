@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package jetbrains.buildServer.agent.messages.regex;
+package jetbrains.buildServer.agent.messages.regex.impl;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.containers.hash.HashMap;
 import jetbrains.buildServer.agent.CurrentBuildRunnerTracker;
 import jetbrains.buildServer.agent.messages.KeepMessagesLogger;
-import jetbrains.buildServer.agent.messages.RegexParserToSimpleMessagesTranslatorAdapter;
 import jetbrains.buildServer.agent.messages.TranslatorsRegistry;
-import jetbrains.buildServer.messages.serviceMessages.ServiceMessage;
-import jetbrains.buildServer.messages.serviceMessages.ServiceMessageHandler;
-import jetbrains.buildServer.messages.serviceMessages.ServiceMessagesRegister;
+import jetbrains.buildServer.agent.messages.regex.*;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.teamcity.util.regex.ParserManager;
@@ -34,8 +31,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.Map;
 
-public class RegexParsersTranslatorsRegistryManipulator {
-  private static final Logger LOG = Logger.getInstance(RegexParsersTranslatorsRegistryManipulator.class.getName());
+public class ParsersRegistryImpl implements ParsersRegistry {
+  private static final Logger LOG = Logger.getInstance(ParsersRegistryImpl.class.getName());
 
   private final TranslatorsRegistry myTranslatorsRegistry;
   private final CurrentBuildRunnerTracker myCurrentBuildRunnerTracker;
@@ -43,35 +40,22 @@ public class RegexParsersTranslatorsRegistryManipulator {
   private final ParserManager myDefaultParsersManager;
   private final Map<String, RegexParserToSimpleMessagesTranslatorAdapter> myRegisteredTranslators;
 
-  public RegexParsersTranslatorsRegistryManipulator(@NotNull final TranslatorsRegistry translatorsRegistry,
-                                                    @NotNull final ServiceMessagesRegister serviceMessagesRegister,
-                                                    @NotNull final CurrentBuildRunnerTracker currentBuildRunnerTracker) {
+  public ParsersRegistryImpl(@NotNull final TranslatorsRegistry translatorsRegistry,
+                             @NotNull final CurrentBuildRunnerTracker currentBuildRunnerTracker) {
     myTranslatorsRegistry = translatorsRegistry;
     myCurrentBuildRunnerTracker = currentBuildRunnerTracker;
-
-    serviceMessagesRegister.registerHandler(RegexParsersCommand.COMMAND_ADD, new ServiceMessageHandler() {
-      @Override
-      public void handle(@NotNull final ServiceMessage message) {
-        LOG.debug(message.getMessageName() + " message found: " + message);
-        register(new RegexParsersCommand(message));
-      }
-    });
-    serviceMessagesRegister.registerHandler(RegexParsersCommand.COMMAND_REMOVE, new ServiceMessageHandler() {
-      @Override
-      public void handle(@NotNull final ServiceMessage message) {
-        LOG.debug(message.getMessageName() + " message found: " + message);
-        doUnregisterParser(new RegexParsersCommand(message));
-      }
-    });
-
     myKeepMessagesLogger = new KeepMessagesLogger();
     final SimpleLogger logger = new SimpleLogger(myKeepMessagesLogger);
     myDefaultParsersManager = new ParserManager(logger);
     myRegisteredTranslators = new HashMap<String, RegexParserToSimpleMessagesTranslatorAdapter>();
   }
 
-  private void doUnregisterParser(@NotNull final RegexParsersCommand command) {
-    final String name = command.getName();
+  public void unregister(@NotNull final ParserCommand.CommandWithParserIdentifier command) {
+    unregister(command.getParserId(), command.getScope());
+  }
+
+  public void unregister(@NotNull final ParserCommand.ParserId parser, @NotNull final ParserCommand.Scope scope) {
+    final String name = parser.getName();
     // Unregister from translators
     final RegexParserToSimpleMessagesTranslatorAdapter translator = myRegisteredTranslators.get(name);
     if (translator != null) {
@@ -79,21 +63,25 @@ public class RegexParsersTranslatorsRegistryManipulator {
     }
   }
 
-  public void register(@NotNull final RegexParsersCommand command) {
+  public void register(@NotNull final ParserCommand.CommandWithParserIdentifier command) {
+    register(command.getParserId(), command.getScope());
+  }
+
+  public void register(@NotNull final ParserCommand.ParserId parserId, @NotNull final ParserCommand.Scope scope) {
     RegexParser parser = null;
-    if (command.getResourcePath() != null) {
-      final String path = command.getResourcePath();
+    if (parserId.getResourcePath() != null) {
+      final String path = parserId.getResourcePath();
       LOG.info("Using parser config from resource " + path);
       parser = RegexParsersHelper.loadParserFromResource(path);
       if (parser == null) {
         LOG.error("Cannot find parser for resource path '" + path + "'");
       }
-    } else if (command.getFile() != null) {
+    } else if (parserId.getFile() != null) {
       if (!myCurrentBuildRunnerTracker.isBuildRunnerRunning()) {
         LOG.warn("Cannot register parser from file: no running build runner (step) found");
         return;
       }
-      final String file = command.getFile();
+      final String file = parserId.getFile();
       File wd = myCurrentBuildRunnerTracker.getCurrentBuildRunner().getWorkingDirectory();
       final File f = new File(wd, file);
       if (!StringUtil.isEmptyOrSpaces(file) && f.exists()) {
@@ -108,6 +96,16 @@ public class RegexParsersTranslatorsRegistryManipulator {
     if (parser != null) {
       register(parser);
     }
+  }
+
+  @Override
+  public void register(@NotNull final ParserCommand.ParserId parser) {
+    register(parser, ParserCommand.Scope.BUILD);
+  }
+
+  @Override
+  public void unregister(@NotNull final ParserCommand.ParserId parser) {
+    unregister(parser, ParserCommand.Scope.BUILD);
   }
 
   public void register(@NotNull final RegexParser parser) {

@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package jetbrains.buildServer.agent.messages;
+package jetbrains.buildServer.agent.messages.regex;
 
 import com.intellij.openapi.diagnostic.Logger;
+import jetbrains.buildServer.agent.messages.BuildLogTail;
+import jetbrains.buildServer.agent.messages.KeepMessagesLogger;
+import jetbrains.buildServer.agent.messages.SimpleMessagesTranslator;
 import jetbrains.buildServer.messages.BuildMessage1;
 import jetbrains.buildServer.messages.serviceMessages.ServiceMessage;
 import jetbrains.teamcity.util.regex.ParserManager;

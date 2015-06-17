@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 @Test
-public class RegexParsersTranslatorsRegistryManipulatorTest extends RunnerTest2Base {
+public class ParsersRegistryImplTest extends RunnerTest2Base {
 
   @Override
   @NotNull
@@ -70,7 +70,7 @@ public class RegexParsersTranslatorsRegistryManipulatorTest extends RunnerTest2B
 
   @Test
   public void testRegisterCommandProcessed() throws Throwable {
-    @Language("Bash") final String script = "echo \"##teamcity[RegexMessageTranslator.Add resource='simple-parser.xml']\"\n" +
+    @Language("Bash") final String script = "echo \"##teamcity[RegexMessageTranslator.Enable resource='simple-parser.xml']\"\n" +
         "sleep 10s\n" +
         "echo \"Should be matched by simple parser\" 1>&2\n" +
         "echo \"END\"";

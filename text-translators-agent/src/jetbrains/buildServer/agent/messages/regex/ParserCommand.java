@@ -145,7 +145,7 @@ public abstract class ParserCommand {
 
     @Override
     public void apply(@NotNull final ParsersRegistry manipulator) {
-      manipulator.register(getParserId());
+      manipulator.enable(getParserId(), Scope.BUILD);
     }
   }
 
@@ -160,7 +160,7 @@ public abstract class ParserCommand {
 
     @Override
     public void apply(@NotNull final ParsersRegistry manipulator) {
-      manipulator.unregister(getParserId());
+      manipulator.disable(getParserId(), Scope.BUILD);
     }
   }
 

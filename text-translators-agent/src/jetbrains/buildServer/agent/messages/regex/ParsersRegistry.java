@@ -16,15 +16,36 @@
 
 package jetbrains.buildServer.agent.messages.regex;
 
+import jetbrains.teamcity.util.regex.RegexParser;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 public interface ParsersRegistry {
   // TODO: Remove extra methods
 
-  void register(@NotNull ParserCommand.CommandWithParserIdentifier parser);
-  void unregister(@NotNull ParserCommand.CommandWithParserIdentifier parser);
-  void register(@NotNull ParserCommand.ParserId parser);
-  void unregister(@NotNull ParserCommand.ParserId parser);
-  void register(@NotNull ParserCommand.ParserId parser, @NotNull ParserCommand.Scope scope);
-  void unregister(@NotNull ParserCommand.ParserId parser, @NotNull ParserCommand.Scope scope);
+//  void enable(@NotNull ParserCommand.CommandWithParserIdentifier parser);
+//
+//  void disable(@NotNull ParserCommand.CommandWithParserIdentifier parser);
+//
+//  void enable(@NotNull ParserCommand.ParserId parser);
+//
+//  void disable(@NotNull ParserCommand.ParserId parser);
+  void enable(@NotNull ParserCommand.ParserId parser, @Nullable ParserCommand.Scope scope);
+  void disable(@NotNull ParserCommand.ParserId parser, @Nullable ParserCommand.Scope scope);
+
+  void enable(@NotNull String name, @Nullable ParserCommand.Scope scope);
+
+  void disable(@NotNull String name, @Nullable ParserCommand.Scope scope);
+
+
+  void register(@NotNull String name, @NotNull RegexParser parser);
+
+  void unregister(@NotNull String name);
+
+  @NotNull
+  Map<String, RegexParser> getRegisteredParsers();
+
+  @NotNull ParserLoader getLoader();
 }

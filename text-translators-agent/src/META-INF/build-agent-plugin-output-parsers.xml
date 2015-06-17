@@ -28,6 +28,7 @@
   <bean class="jetbrains.buildServer.agent.messages.impl.TranslatorsRegistryImpl"/>
 
   <!-- Regex translators -->
+  <bean class="jetbrains.buildServer.agent.messages.regex.ParserLoader"/>
   <bean class="jetbrains.buildServer.agent.messages.regex.impl.ParsersRegistryImpl"/>
   <bean class="jetbrains.buildServer.agent.messages.regex.ParserCommandServiceMessageHandler"/>
 </beans>

@@ -18,43 +18,41 @@ package jetbrains.buildServer.agent.messages.regex.impl;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.containers.hash.HashMap;
-import jetbrains.buildServer.agent.CurrentBuildRunnerTracker;
 import jetbrains.buildServer.agent.messages.KeepMessagesLogger;
 import jetbrains.buildServer.agent.messages.TranslatorsRegistry;
 import jetbrains.buildServer.agent.messages.regex.*;
-import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.teamcity.util.regex.ParserManager;
 import jetbrains.teamcity.util.regex.RegexParser;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
+import java.util.Collections;
 import java.util.Map;
 
+// TODO: Support scopes
 public class ParsersRegistryImpl implements ParsersRegistry {
   private static final Logger LOG = Logger.getInstance(ParsersRegistryImpl.class.getName());
 
   private final TranslatorsRegistry myTranslatorsRegistry;
-  private final CurrentBuildRunnerTracker myCurrentBuildRunnerTracker;
+  @NotNull
+  private final ParserLoader myLoader;
   private final KeepMessagesLogger myKeepMessagesLogger;
   private final ParserManager myDefaultParsersManager;
   private final Map<String, RegexParserToSimpleMessagesTranslatorAdapter> myRegisteredTranslators;
+  private final Map<String, RegexParser> myKnownParsers = new HashMap<String, RegexParser>();
 
   public ParsersRegistryImpl(@NotNull final TranslatorsRegistry translatorsRegistry,
-                             @NotNull final CurrentBuildRunnerTracker currentBuildRunnerTracker) {
+                             @NotNull final ParserLoader loader) {
     myTranslatorsRegistry = translatorsRegistry;
-    myCurrentBuildRunnerTracker = currentBuildRunnerTracker;
+    myLoader = loader;
     myKeepMessagesLogger = new KeepMessagesLogger();
     final SimpleLogger logger = new SimpleLogger(myKeepMessagesLogger);
     myDefaultParsersManager = new ParserManager(logger);
     myRegisteredTranslators = new HashMap<String, RegexParserToSimpleMessagesTranslatorAdapter>();
   }
 
-  public void unregister(@NotNull final ParserCommand.CommandWithParserIdentifier command) {
-    unregister(command.getParserId(), command.getScope());
-  }
-
-  public void unregister(@NotNull final ParserCommand.ParserId parser, @NotNull final ParserCommand.Scope scope) {
+  public void disable(@NotNull final ParserCommand.ParserId parser, @Nullable final ParserCommand.Scope scope) {
     final String name = parser.getName();
     // Unregister from translators
     final RegexParserToSimpleMessagesTranslatorAdapter translator = myRegisteredTranslators.get(name);
@@ -63,57 +61,30 @@ public class ParsersRegistryImpl implements ParsersRegistry {
     }
   }
 
-  public void register(@NotNull final ParserCommand.CommandWithParserIdentifier command) {
-    register(command.getParserId(), command.getScope());
-  }
-
-  public void register(@NotNull final ParserCommand.ParserId parserId, @NotNull final ParserCommand.Scope scope) {
-    RegexParser parser = null;
-    if (parserId.getResourcePath() != null) {
-      final String path = parserId.getResourcePath();
-      LOG.info("Using parser config from resource " + path);
-      parser = RegexParsersHelper.loadParserFromResource(path);
-      if (parser == null) {
-        LOG.error("Cannot find parser for resource path '" + path + "'");
-      }
-    } else if (parserId.getFile() != null) {
-      if (!myCurrentBuildRunnerTracker.isBuildRunnerRunning()) {
-        LOG.warn("Cannot register parser from file: no running build runner (step) found");
+  public void enable(@NotNull final ParserCommand.ParserId parserId, @Nullable final ParserCommand.Scope scope) {
+    if (!StringUtil.isEmptyOrSpaces(parserId.getName())) {
+      String name = parserId.getName();
+      final RegexParser parser = myKnownParsers.get(name);
+      if (parser != null) {
+        // Looks like already registered.
+        LOG.debug("Parser '" + name + "' already registered");
+        enable(parser, scope);
         return;
       }
-      final String file = parserId.getFile();
-      File wd = myCurrentBuildRunnerTracker.getCurrentBuildRunner().getWorkingDirectory();
-      final File f = new File(wd, file);
-      if (!StringUtil.isEmptyOrSpaces(file) && f.exists()) {
-        final File cf = FileUtil.getCanonicalFile(f);
-        if (cf.exists()) {
-          LOG.info("Using parser config from file " + cf.getAbsolutePath());
-          parser = RegexParsersHelper.loadParserFromFile(cf);
-        }
-      }
     }
-
+    final RegexParser parser = myLoader.load(parserId);
     if (parser != null) {
-      register(parser);
+      register(parser.getName(), parser);
+      enable(parser, null);
     }
   }
 
-  @Override
-  public void register(@NotNull final ParserCommand.ParserId parser) {
-    register(parser, ParserCommand.Scope.BUILD);
-  }
-
-  @Override
-  public void unregister(@NotNull final ParserCommand.ParserId parser) {
-    unregister(parser, ParserCommand.Scope.BUILD);
-  }
-
-  public void register(@NotNull final RegexParser parser) {
+  public void enable(@NotNull final RegexParser parser, @Nullable final ParserCommand.Scope scope) {
     final RegexParserToSimpleMessagesTranslatorAdapter adapter = new RegexParserToSimpleMessagesTranslatorAdapter(parser, myDefaultParsersManager, myKeepMessagesLogger);
-    register(adapter);
+    enable(adapter);
   }
 
-  public void register(@NotNull final RegexParserToSimpleMessagesTranslatorAdapter adapter) {
+  public void enable(@NotNull final RegexParserToSimpleMessagesTranslatorAdapter adapter) {
     final String name = adapter.getName();
     LOG.info("Registering parser '" + name + "' as text translator");
     final RegexParserToSimpleMessagesTranslatorAdapter old = myRegisteredTranslators.put(name, adapter);
@@ -123,7 +94,57 @@ public class ParsersRegistryImpl implements ParsersRegistry {
     myTranslatorsRegistry.register(adapter);
   }
 
-  public void unregister(@NotNull final RegexParserToSimpleMessagesTranslatorAdapter adapter) {
+  public void disable(@NotNull final RegexParserToSimpleMessagesTranslatorAdapter adapter) {
     myTranslatorsRegistry.unregister(adapter);
+  }
+
+  @Override
+  public void enable(@NotNull final String name, @Nullable final ParserCommand.Scope scope) {
+    final RegexParser parser = myKnownParsers.get(name);
+    if (parser == null) {
+      LOG.error("Cannot enable parser '" + name + "': not found. Register parser first");
+      return;
+    }
+    enable(parser, scope);
+  }
+
+  @Override
+  public void disable(@NotNull final String name, @Nullable final ParserCommand.Scope scope) {
+    disable(new ParserCommand.ParserId(name, null, null), scope);
+  }
+
+  @Override
+  public void register(@NotNull final String name, @NotNull final RegexParser parser) {
+    synchronized (myKnownParsers) {
+      final RegexParser already = myKnownParsers.get(name);
+      if (already != null) {
+        if (already.equals(parser)) {
+          LOG.warn("Exact same parser with name '" + name + "' already registered");
+        } else {
+          LOG.warn("Parser with name '" + name + "' already registered. Nothing is changed. Unregister parser first.");
+        }
+      } else {
+        myKnownParsers.put(name, parser);
+      }
+    }
+  }
+
+  @Override
+  public void unregister(@NotNull final String name) {
+    synchronized (myKnownParsers) {
+      myKnownParsers.remove(name);
+    }
+  }
+
+  @NotNull
+  @Override
+  public Map<String, RegexParser> getRegisteredParsers() {
+    return Collections.unmodifiableMap(myKnownParsers);
+  }
+
+  @NotNull
+  @Override
+  public ParserLoader getLoader() {
+    return myLoader;
   }
 }

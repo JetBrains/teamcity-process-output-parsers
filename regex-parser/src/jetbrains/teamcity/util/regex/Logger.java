@@ -14,22 +14,27 @@
  * limitations under the License.
  */
 
-package jetbrains.buildServer.agent.messages;
+package jetbrains.teamcity.util.regex;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 /**
- * Simple translators registry.
- * <br/>
- * Don't forget to unregister translator once step/build is finished.
+ * @author Vladislav.Rassokhin
  */
-public interface TranslatorsRegistry {
-  void register(@NotNull SimpleMessagesTranslator translator);
+public interface Logger {
 
-  void unregister(@NotNull SimpleMessagesTranslator translator);
+  void message(@NotNull String message);
 
-  @NotNull
-  List<SimpleMessagesTranslator> getAllTranslators();
+  void error(@NotNull String message);
+
+  void warning(@NotNull String message);
+
+  void blockStart(@NotNull String name);
+
+  void blockFinish(@NotNull String name);
+
+  void compilationBlockStart(@NotNull String name);
+
+  void compilationBlockFinish(@NotNull String name);
+
 }

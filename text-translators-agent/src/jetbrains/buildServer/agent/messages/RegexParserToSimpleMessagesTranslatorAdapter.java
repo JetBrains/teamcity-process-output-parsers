@@ -17,10 +17,10 @@
 package jetbrains.buildServer.agent.messages;
 
 import com.intellij.openapi.diagnostic.Logger;
-import jetbrains.buildServer.cmakerunner.regexparser.ParserManager;
-import jetbrains.buildServer.cmakerunner.regexparser.RegexParser;
 import jetbrains.buildServer.messages.BuildMessage1;
 import jetbrains.buildServer.messages.serviceMessages.ServiceMessage;
+import jetbrains.teamcity.util.regex.ParserManager;
+import jetbrains.teamcity.util.regex.RegexParser;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

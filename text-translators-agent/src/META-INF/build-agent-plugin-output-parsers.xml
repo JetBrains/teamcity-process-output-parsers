@@ -25,7 +25,7 @@
 
   <!-- Text translators EP -->
   <bean class="jetbrains.buildServer.agent.messages.TextBuildMessagesTranslator"/>
-  <bean class="jetbrains.buildServer.agent.messages.TranslatorsRegistryImpl"/>
+  <bean class="jetbrains.buildServer.agent.messages.impl.TranslatorsRegistryImpl"/>
 
   <!-- Regex translators -->
   <bean class="jetbrains.buildServer.agent.messages.regex.RegexParsersTranslatorsRegistryManipulator"/>

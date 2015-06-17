@@ -18,7 +18,7 @@
 <suite name="process-output-parsers">
   <test name="all tests">
     <packages>
-      <package name="jetbrains.buildServer.cmakerunner.tests.regexparser.*"/>
+      <package name="jetbrains.teamcity.util.regex"/>
       <package name="jetbrains.buildServer.agent.messages.regex.*"/>
     </packages>
   </test>

@@ -16,9 +16,9 @@
 
 package jetbrains.buildServer.agent.messages.regex;
 
-import jetbrains.buildServer.cmakerunner.regexparser.ParserLoader;
-import jetbrains.buildServer.cmakerunner.regexparser.RegexParser;
 import jetbrains.buildServer.util.FileUtil;
+import jetbrains.teamcity.util.regex.ParserLoader;
+import jetbrains.teamcity.util.regex.RegexParser;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

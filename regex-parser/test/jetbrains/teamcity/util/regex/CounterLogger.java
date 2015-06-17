@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package jetbrains.buildServer.cmakerunner.tests.regexparser;
+package jetbrains.teamcity.util.regex;
 
-import jetbrains.buildServer.cmakerunner.regexparser.LoggerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 /**

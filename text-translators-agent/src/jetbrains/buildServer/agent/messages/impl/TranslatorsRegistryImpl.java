@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package jetbrains.buildServer.agent.messages;
+package jetbrains.buildServer.agent.messages.impl;
 
+import jetbrains.buildServer.agent.messages.SimpleMessagesTranslator;
+import jetbrains.buildServer.agent.messages.TranslatorsRegistry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -35,6 +37,7 @@ public class TranslatorsRegistryImpl implements TranslatorsRegistry {
     mySimpleMessagesTranslators.remove(translator);
   }
 
+  @NotNull
   @Override
   public List<SimpleMessagesTranslator> getAllTranslators() {
     return Collections.unmodifiableList(mySimpleMessagesTranslators);

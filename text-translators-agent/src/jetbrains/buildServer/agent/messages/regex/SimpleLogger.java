@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package jetbrains.buildServer.agent.messages;
+package jetbrains.buildServer.agent.messages.regex;
 
 import jetbrains.buildServer.agent.BuildProgressLogger;
-import jetbrains.buildServer.cmakerunner.regexparser.LoggerAdapter;
 import jetbrains.buildServer.messages.DefaultMessagesInfo;
+import jetbrains.teamcity.util.regex.LoggerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 /**

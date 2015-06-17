@@ -21,15 +21,14 @@ import com.intellij.util.containers.hash.HashMap;
 import jetbrains.buildServer.agent.CurrentBuildRunnerTracker;
 import jetbrains.buildServer.agent.messages.KeepMessagesLogger;
 import jetbrains.buildServer.agent.messages.RegexParserToSimpleMessagesTranslatorAdapter;
-import jetbrains.buildServer.agent.messages.SimpleLogger;
 import jetbrains.buildServer.agent.messages.TranslatorsRegistry;
-import jetbrains.buildServer.cmakerunner.regexparser.ParserManager;
-import jetbrains.buildServer.cmakerunner.regexparser.RegexParser;
 import jetbrains.buildServer.messages.serviceMessages.ServiceMessage;
 import jetbrains.buildServer.messages.serviceMessages.ServiceMessageHandler;
 import jetbrains.buildServer.messages.serviceMessages.ServiceMessagesRegister;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
+import jetbrains.teamcity.util.regex.ParserManager;
+import jetbrains.teamcity.util.regex.RegexParser;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

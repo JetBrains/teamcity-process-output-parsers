@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<assembly>
+  <id>plugin-assembly</id>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <files>
+     <file>
+         <source>target/teamcity-plugin.xml</source>
+         <outputDirectory>/</outputDirectory>
+     </file> 
+     <file>
+         <source>target/process-output-parsers-agent.zip</source>
+         <outputDirectory>agent</outputDirectory>
+     </file> 
+  </files>
+</assembly>

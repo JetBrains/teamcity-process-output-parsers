@@ -45,8 +45,16 @@
                     <outputFile>${basedir}/target/teamcity-plugin.xml</outputFile>
                     <replacements>
                         <replacement>
-                            <token>@Version@</token>
+                            <token>@Plugin_Version@</token>
                             <value>${teamcity.plugin.version}</value>
+                        </replacement>
+                        <replacement>
+                            <token>@Plugin_Vendor@</token>
+                            <value>JetBrains, s.r.o.</value>
+                        </replacement>
+                        <replacement>
+                            <token>@Plugin_Vendor_Url@</token>
+                            <value>http://www.jetbrains.com</value>
                         </replacement>
                     </replacements>
                 </configuration>

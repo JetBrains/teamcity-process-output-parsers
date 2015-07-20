@@ -33,7 +33,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.Map;
 
-@Test
+@Test(enabled = false)
 public class ParsersRegistryImplTest extends RunnerTest2Base {
 
   @Override
@@ -68,7 +68,7 @@ public class ParsersRegistryImplTest extends RunnerTest2Base {
     }};
   }
 
-  @Test
+  @Test(enabled = false)
   public void testRegisterCommandProcessed() throws Throwable {
     @Language("Bash") final String script = "echo \"##teamcity[RegexMessageParser.Enable resource='simple-parser.xml']\"\n" +
         "sleep 10s\n" +

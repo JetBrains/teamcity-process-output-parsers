@@ -76,5 +76,14 @@
             <scope>provided</scope>
         </dependency>
 
+
+        <dependency>
+            <groupId>org.jetbrains.teamcity</groupId>
+            <artifactId>agent-server-logging</artifactId>
+            <version>${teamcity-version}</version>
+            <scope>system</scope>
+            <systemPath>${teamcity.distribution.path}/buildAgent/lib/server-logging.jar</systemPath>
+        </dependency>
+
     </dependencies>
 </project>

@@ -15,10 +15,10 @@
   -->
 
 <!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd">
-<suite name="text-translators-test">
+<suite name="regex-parser">
   <test name="all tests">
     <packages>
-      <package name="jetbrains.buildServer.agent.messages.regex.*"/>
+      <package name="jetbrains.teamcity.util.regex"/>
     </packages>
   </test>
 </suite>

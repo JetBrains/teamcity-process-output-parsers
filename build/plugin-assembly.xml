@@ -9,7 +9,7 @@
      <file>
          <source>target/teamcity-plugin.xml</source>
          <outputDirectory>/</outputDirectory>
-         <destName>teamcity-agent.xml</destName>
+         <destName>teamcity-plugin.xml</destName>
      </file> 
      <file>
          <source>target/process-output-parsers-agent.zip</source>

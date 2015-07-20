@@ -18,22 +18,22 @@
       <profile default="true" name="Default" enabled="false">
         <processorPath useClasspath="true" />
       </profile>
-      <profile default="false" name="Annotation profile for regex-parser" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="regex-parser" />
-      </profile>
       <profile default="false" name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="regex-parser" />
         <module name="text-translators-agent" />
         <module name="text-translators-test" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.6" />
+    <bytecodeTargetLevel target="1.6">
+      <module name="build" target="1.6" />
+      <module name="process-output-parsers" target="1.6" />
+      <module name="regex-parser" target="1.6" />
+      <module name="text-translators-agent" target="1.6" />
+      <module name="text-translators-test" target="1.6" />
+    </bytecodeTargetLevel>
   </component>
 </project>

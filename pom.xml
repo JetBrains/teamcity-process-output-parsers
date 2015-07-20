@@ -8,6 +8,8 @@
     <packaging>pom</packaging>
     <properties>
         <teamcity-version>${teamcityVersion}</teamcity-version>
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <maven.compiler.target>1.6</maven.compiler.target>
     </properties>
     <repositories>
         <repository>
@@ -16,18 +18,7 @@
         </repository>
     </repositories>
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <configuration>
-                        <source>1.6</source>
-                        <target>1.6</target>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+        <sourceDirectory>src</sourceDirectory>
     </build>
     <modules>
         <module>regex-parser</module>

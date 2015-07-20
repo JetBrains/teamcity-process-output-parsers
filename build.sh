@@ -1,3 +1,3 @@
 #!/bin/bash
-
-mvn -DteamcityVersion=SNAPSHOT clean test package
+targets="${@:-clean test package}"
+mvn -DteamcityVersion=SNAPSHOT $targets

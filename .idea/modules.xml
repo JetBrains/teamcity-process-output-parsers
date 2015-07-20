@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/build/build.iml" filepath="$PROJECT_DIR$/build/build.iml" />
       <module fileurl="file://$PROJECT_DIR$/process-output-parsers.iml" filepath="$PROJECT_DIR$/process-output-parsers.iml" />
       <module fileurl="file://$PROJECT_DIR$/regex-parser/regex-parser.iml" filepath="$PROJECT_DIR$/regex-parser/regex-parser.iml" />
       <module fileurl="file://$PROJECT_DIR$/text-translators-agent/text-translators-agent.iml" filepath="$PROJECT_DIR$/text-translators-agent/text-translators-agent.iml" />

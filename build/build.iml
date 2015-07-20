@@ -8,5 +8,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="regex-parser" />
+    <orderEntry type="module" module-name="text-translators-agent" />
   </component>
 </module>

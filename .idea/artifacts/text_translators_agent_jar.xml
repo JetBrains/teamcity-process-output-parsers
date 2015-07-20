@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="text-translators-agent:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/text_translators_agent_jar</output-path>
-    <root id="archive" name="text-translators-agent.jar">
-      <element id="module-output" name="text-translators-agent" />
-    </root>
-  </artifact>
-</component>

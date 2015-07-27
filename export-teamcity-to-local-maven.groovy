@@ -94,7 +94,10 @@ if (error) {
     System.exit(3);
 }
 
-def dependencies = new StringBuilder();
+// Generate pom for each jar
+// And generate dependency reference for each pom
+
+def dependencies = new ArrayList<String>();
 
 def install = new ArrayList<Tuple>()
 for (Path jar : jars.values()) {
@@ -118,7 +121,7 @@ for (Path jar : jars.values()) {
     Tuple tuple = [pom, jar]
     install.add(tuple)
 
-    dependencies.append """
+    dependencies.add """
 <dependency>
   <groupId>org.jetbrains.teamcity.internal.generated</groupId>
   <artifactId>${artifactId}</artifactId>
@@ -127,11 +130,15 @@ for (Path jar : jars.values()) {
 """
 }
 
+def allPomXml = output.resolve("everything-pom.xml")
+if (Files.exists(allPomXml)) Files.delete(allPomXml)
 
-def script = new StringBuilder();
-script.append """<project>
+// Generate install script
+
+def installScriptContent = new StringBuilder();
+installScriptContent.append """<project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.jetbrains.teamcity</groupId>
+  <groupId>org.jetbrains.teamcity.internal.generated</groupId>
   <artifactId>local-artifact-installer</artifactId>
   <version>1.0-SNAPSHOT</version>
   <build>
@@ -144,7 +151,7 @@ script.append """<project>
 int i = 0;
 for (Tuple t : install) {
     def (pom, jar) = t;
-    script.append """
+    installScriptContent.append """
           <execution>
             <id>install${i++}</id>
             <phase>package</phase>
@@ -158,8 +165,19 @@ for (Tuple t : install) {
           </execution>"""
 
 }
+installScriptContent.append """
+          <execution>
+            <id>install${i++}</id>
+            <phase>package</phase>
+            <goals>
+              <goal>install</goal>
+            </goals>
+            <configuration>
+              <pomFile>${allPomXml.toAbsolutePath().toString()}</pomFile>
+            </configuration>
+          </execution>"""
 
-script.append """
+installScriptContent.append """
         </executions>
       </plugin>
     </plugins>
@@ -169,14 +187,24 @@ script.append """
 
 println "Generated poms for ${install.size()} files"
 
+List<String> everything = new ArrayList<>()
+
+everything.add("""<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.jetbrains.teamcity.internal.generated</groupId>
+  <artifactId>all-in-one</artifactId>
+  <version>SNAPSHOT</version>
+  <packagingType>pom</packagingType>
+  <dependencies>
+""")
+everything.addAll(dependencies)
+everything.add("""</dependencies>
+</project>""")
+Files.createFile(allPomXml);
+Files.write(allPomXml, everything, Charset.forName("UTF-8"))
+
+// Save install-pom.xml
 def installPom = output.resolve("install-pom.xml")
 if (Files.exists(installPom)) Files.delete(installPom)
 Files.createFile(installPom);
-Files.write(installPom, Arrays.<String> asList(script.toString()), Charset.forName("UTF-8"))
-
-def dependenciesXml = output.resolve("dependencies-pom.xml")
-if (Files.exists(dependenciesXml)) Files.delete(dependenciesXml)
-Files.createFile(dependenciesXml);
-Files.write(dependenciesXml, Arrays.<String> asList(dependencies.toString()), Charset.forName("UTF-8"))
-
-
+Files.write(installPom, Arrays.<String> asList(installScriptContent.toString()), Charset.forName("UTF-8"))

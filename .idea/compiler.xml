@@ -28,7 +28,7 @@
         <module name="text-translators-test" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.6">
+    <bytecodeTargetLevel>
       <module name="build" target="1.6" />
       <module name="process-output-parsers" target="1.6" />
       <module name="regex-parser" target="1.6" />

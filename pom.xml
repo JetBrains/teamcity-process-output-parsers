@@ -7,8 +7,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <properties>
-        <teamcity-version>${teamcityVersion}</teamcity-version>
-        <teamcity.distribution.path>${env.TeamCityDistribution}</teamcity.distribution.path>
+        <teamcity-version>SNAPSHOT</teamcity-version>
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
     </properties>
@@ -27,4 +26,19 @@
         <module>text-translators-test</module>
         <module>build</module>
     </modules>
+
+  <profiles>
+    <profile>
+      <id>TC-Version-From-Property</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+        <property>
+          <name>teamcityVersion</name>
+        </property>
+      </activation>
+      <properties>
+        <teamcity-version>${teamcityVersion}</teamcity-version>
+      </properties>
+    </profile>
+  </profiles>
 </project>

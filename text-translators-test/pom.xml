@@ -44,75 +44,9 @@
             <artifactId>agent-api</artifactId>
             <version>${teamcity-version}</version>
         </dependency>
-
-
-        <dependency>
-            <groupId>org.jetbrains.teamcity</groupId>
-            <artifactId>agent-server-logging</artifactId>
-            <version>${teamcity-version}</version>
-            <scope>system</scope>
-            <systemPath>${teamcity.distribution.path}/buildAgent/lib/server-logging.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.teamcity</groupId>
-            <artifactId>tests-integration</artifactId>
-            <version>${teamcity-version}</version>
-            <scope>system</scope>
-            <systemPath>${teamcity.distribution.path}/devPackage/tests/tests-integration.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.teamcity</groupId>
-            <artifactId>agent-laucher-api</artifactId>
-            <version>${teamcity-version}</version>
-            <scope>system</scope>
-            <systemPath>${teamcity.distribution.path}/buildAgent/lib/launcher-api.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.teamcity</groupId>
-            <artifactId>agent</artifactId>
-            <version>${teamcity-version}</version>
-            <scope>system</scope>
-            <systemPath>${teamcity.distribution.path}/buildAgent/lib/agent.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.teamcity</groupId>
-            <artifactId>app-wrapper</artifactId>
-            <version>${teamcity-version}</version>
-            <scope>system</scope>
-            <systemPath>${teamcity.distribution.path}/buildAgent/lib/app-wrapper.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.teamcity</groupId>
-            <artifactId>agent-upgrade</artifactId>
-            <version>${teamcity-version}</version>
-            <scope>system</scope>
-            <systemPath>${teamcity.distribution.path}/buildAgent/lib/agent-upgrade.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.teamcity</groupId>
-            <artifactId>common-impl</artifactId>
-            <version>${teamcity-version}</version>
-            <scope>system</scope>
-            <systemPath>${teamcity.distribution.path}/buildAgent/lib/common-impl.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.teamcity</groupId>
-            <artifactId>server-impl</artifactId>
-            <version>${teamcity-version}</version>
-            <scope>system</scope>
-            <systemPath>${teamcity.distribution.path}/webapps/ROOT/WEB-INF/lib/server.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.teamcity</groupId>
-            <artifactId>db-impl</artifactId>
-            <version>${teamcity-version}</version>
-            <scope>system</scope>
-            <systemPath>${teamcity.distribution.path}/webapps/ROOT/WEB-INF/lib/db.jar</systemPath>
-        </dependency>
-
     </dependencies>
     <build>
-        <sourceDirectory>test</sourceDirectory>
+        <testSourceDirectory>test</testSourceDirectory>
         <testResources>
             <testResource>
                 <directory>testData</directory>

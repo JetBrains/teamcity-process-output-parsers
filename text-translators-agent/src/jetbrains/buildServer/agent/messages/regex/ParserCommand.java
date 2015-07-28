@@ -92,6 +92,18 @@ public abstract class ParserCommand {
     public String getFile() {
       return myFile;
     }
+
+    public static ParserId byName(@NotNull final String name) {
+      return new ParserId(name, null, null);
+    }
+
+    public static ParserId byResourcePath(@NotNull final String path) {
+      return new ParserId(null, path, null);
+    }
+
+    public static ParserId byFilePath(@NotNull final String path) {
+      return new ParserId(null, null, path);
+    }
   }
 
   public abstract static class CommandWithScope extends ParserCommand {

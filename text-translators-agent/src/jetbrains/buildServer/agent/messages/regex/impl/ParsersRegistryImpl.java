@@ -17,7 +17,6 @@
 package jetbrains.buildServer.agent.messages.regex.impl;
 
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.util.containers.hash.HashMap;
 import jetbrains.buildServer.agent.messages.KeepMessagesLogger;
 import jetbrains.buildServer.agent.messages.TranslatorsRegistry;
 import jetbrains.buildServer.agent.messages.regex.*;
@@ -28,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 // TODO: Support scopes
@@ -41,6 +41,8 @@ public class ParsersRegistryImpl implements ParsersRegistry {
   private final ParserManager myDefaultParsersManager;
   private final Map<String, RegexParserToSimpleMessagesTranslatorAdapter> myRegisteredTranslators;
   private final Map<String, RegexParser> myKnownParsers = new HashMap<String, RegexParser>();
+  private final Map<ParserCommand.ParserId, String> myParsersHistory = new HashMap<ParserCommand.ParserId, String>();
+
 
   public ParsersRegistryImpl(@NotNull final TranslatorsRegistry translatorsRegistry,
                              @NotNull final ParserLoader loader) {
@@ -53,12 +55,17 @@ public class ParsersRegistryImpl implements ParsersRegistry {
   }
 
   public void disable(@NotNull final ParserCommand.ParserId parser, @Nullable final ParserCommand.Scope scope) {
-    final String name = parser.getName();
-    // Unregister from translators
-    final RegexParserToSimpleMessagesTranslatorAdapter translator = myRegisteredTranslators.get(name);
-    if (translator != null) {
-      myTranslatorsRegistry.unregister(translator);
+    if (!StringUtil.isEmptyOrSpaces(parser.getName())) {
+      String name = parser.getName();
+      disable(name, scope);
+      return;
     }
+    final String name = myParsersHistory.get(parser);
+    if (name == null) {
+      LOG.warn("Cannot disable parser '" + parser + "': unknown parser identifier");
+      return;
+    }
+    disable(name, scope);
   }
 
   public void enable(@NotNull final ParserCommand.ParserId parserId, @Nullable final ParserCommand.Scope scope) {
@@ -74,6 +81,7 @@ public class ParsersRegistryImpl implements ParsersRegistry {
     }
     final RegexParser parser = myLoader.load(parserId);
     if (parser != null) {
+      myParsersHistory.put(parserId, parser.getName());
       register(parser.getName(), parser);
       enable(parser, null);
     }
@@ -94,10 +102,6 @@ public class ParsersRegistryImpl implements ParsersRegistry {
     myTranslatorsRegistry.register(adapter);
   }
 
-  public void disable(@NotNull final RegexParserToSimpleMessagesTranslatorAdapter adapter) {
-    myTranslatorsRegistry.unregister(adapter);
-  }
-
   @Override
   public void enable(@NotNull final String name, @Nullable final ParserCommand.Scope scope) {
     final RegexParser parser = myKnownParsers.get(name);
@@ -110,7 +114,14 @@ public class ParsersRegistryImpl implements ParsersRegistry {
 
   @Override
   public void disable(@NotNull final String name, @Nullable final ParserCommand.Scope scope) {
-    disable(new ParserCommand.ParserId(name, null, null), scope);
+    // Unregister from translators
+    final RegexParserToSimpleMessagesTranslatorAdapter translator = myRegisteredTranslators.get(name);
+    if (translator == null) {
+      LOG.warn("Cannot disable parser with name '" + name + "': not found");
+    } else {
+      myTranslatorsRegistry.unregister(translator);
+      myRegisteredTranslators.remove(name);
+    }
   }
 
   @Override

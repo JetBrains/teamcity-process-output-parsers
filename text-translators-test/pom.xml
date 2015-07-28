@@ -44,6 +44,25 @@
             <artifactId>agent-api</artifactId>
             <version>${teamcity-version}</version>
         </dependency>
+
+        <!-- jetbrains.buildServer.agent.impl.CurrentBuildTrackerImpl -->
+        <dependency>
+            <groupId>org.jetbrains.teamcity.internal</groupId>
+            <artifactId>agent</artifactId>
+            <version>${teamcity-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains.teamcity.internal.generated</groupId>
+            <artifactId>tests-integration</artifactId>
+            <version>${teamcity-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains.teamcity.internal.generated</groupId>
+            <artifactId>server-logging</artifactId>
+            <version>${teamcity-version}</version>
+        </dependency>
     </dependencies>
     <build>
         <testSourceDirectory>test</testSourceDirectory>

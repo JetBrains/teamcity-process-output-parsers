@@ -53,7 +53,6 @@
             <scope>provided</scope>
         </dependency>
 
-
         <dependency>
             <groupId>org.jetbrains.teamcity.idea</groupId>
             <artifactId>resources_en</artifactId>
@@ -76,7 +75,7 @@
             <scope>provided</scope>
         </dependency>
 
-
+        <!-- Required for jetbrains.buildServer.agent.BaseServerLoggerFacade -->
         <dependency>
             <groupId>org.jetbrains.teamcity.internal.generated</groupId>
             <artifactId>server-logging</artifactId>

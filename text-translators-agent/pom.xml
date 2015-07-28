@@ -80,7 +80,8 @@
         <dependency>
             <groupId>org.jetbrains.teamcity.internal.generated</groupId>
             <artifactId>server-logging</artifactId>
-            <version>SNAPSHOT</version>
+            <version>${teamcity-version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

@@ -9,6 +9,13 @@
     </parent>
     <artifactId>text-translators-agent</artifactId>
     <packaging>jar</packaging>
+    <build>
+        <resources>
+            <resource>
+                <directory>resources</directory>
+            </resource>
+        </resources>
+    </build>
     <dependencies>
         <dependency>
             <groupId>jetbrains.teamcity</groupId>

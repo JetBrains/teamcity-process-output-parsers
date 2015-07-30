@@ -11,6 +11,7 @@
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
     <repositories>
         <repository>
@@ -39,6 +40,18 @@
       </activation>
       <properties>
         <teamcity-version>${teamcityVersion}</teamcity-version>
+      </properties>
+    </profile>
+    <profile>
+      <id>Deploy-To-TC</id>
+      <activation>
+        <property>
+          <name>env.TC_MAVEN_DEPLOY_DIR</name>
+        </property>
+      </activation>
+      <properties>
+        <maven.deploy.skip>false</maven.deploy.skip>
+        <altDeploymentRepository>LOCAL::default::file://${env.TC_MAVEN_DEPLOY_DIR}/</altDeploymentRepository>
       </properties>
     </profile>
   </profiles>

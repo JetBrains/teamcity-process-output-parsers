@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>jetbrains.teamcity</groupId>
-        <artifactId>process-output-parsers</artifactId>
+        <artifactId>process-output-parsers-root</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -16,14 +16,14 @@
         <dependency>
             <groupId>jetbrains.teamcity</groupId>
             <artifactId>regex-parser</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>jetbrains.teamcity</groupId>
             <artifactId>text-translators-agent</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
 

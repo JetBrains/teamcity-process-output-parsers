@@ -4,26 +4,25 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>jetbrains.teamcity</groupId>
-        <artifactId>process-output-parsers</artifactId>
+        <artifactId>process-output-parsers-root</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>build</artifactId>
+    <artifactId>process-output-parsers</artifactId>
     <packaging>pom</packaging>
     <properties>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
-        <teamcity.plugin.version>${teamcityPluginVersion}</teamcity.plugin.version>
-        <!--<teamcity.plugin.version>snapshot-${maven.build.timestamp}</teamcity.plugin.version>-->
+        <teamcity.plugin.version>SNAPSHOT-${maven.build.timestamp}</teamcity.plugin.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>jetbrains.teamcity</groupId>
             <artifactId>regex-parser</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>jetbrains.teamcity</groupId>
             <artifactId>text-translators-agent</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
     <build>
@@ -99,4 +98,17 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>TC-Plugin-Version-From-Property</id>
+            <activation>
+                <property>
+                    <name>TeamCityPluginVersion</name>
+                </property>
+            </activation>
+            <properties>
+                <teamcity.plugin.version>${TeamCityPluginVersion}</teamcity.plugin.version>
+            </properties>
+        </profile>
+    </profiles>
 </project>

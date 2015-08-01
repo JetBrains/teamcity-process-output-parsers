@@ -124,6 +124,12 @@ public class ParsersRegistryImpl implements ParsersRegistry {
     }
   }
 
+  public void disable(@NotNull final RegexParserToSimpleMessagesTranslatorAdapter adapter) {
+    final String name = adapter.getName();
+    LOG.info("Unregistering '" + name + "' text translator");
+    myTranslatorsRegistry.unregister(adapter);
+  }
+
   @Override
   public void register(@NotNull final String name, @NotNull final RegexParser parser) {
     synchronized (myKnownParsers) {

@@ -1,19 +1,15 @@
 apply plugin: 'java'
 
-apply plugin: 'com.github.rodm.teamcity-agent'
-
-teamcity {
-    version = teamcityVersion
-
-//    descriptor {
-//        pluginDeployment {
-//            useSeparateClassloader = true
-//        }
-//    }
-//     Alternative way to specify the agent plugin descriptor
-//    descriptor = project.file('teamcity-agent-plugin.xml')
+project.plugins.withType(JavaPlugin) {
+    def providedConfiguration = configurations.maybeCreate('provided')
+            .setVisible(false)
+            .setDescription('Additional compile classpath for TeamCity libraries that will not be part of the plugin archive.')
+    configurations.getByName(JavaPlugin.COMPILE_CONFIGURATION_NAME).extendsFrom(providedConfiguration)
 }
 
+dependencies {
+    provided(group: 'org.jetbrains.teamcity', name: 'common-api', version: teamcityVersion)
+}
 
 sourceSets {
     main {

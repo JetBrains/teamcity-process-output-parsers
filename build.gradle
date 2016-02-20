@@ -1,0 +1,102 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath group: 'com.github.rodm', name: 'gradle-teamcity-plugin', version: '0.8.1'
+    }
+}
+
+ext {
+    teamcityVersion = '9.1.6'
+    teamcityDir = "$rootDir/servers/TeamCity-${teamcityVersion}"
+    teamcityDataDir = "$rootDir/data/" + (teamcityVersion =~ /(\d+\.\d+).*/)[0][1]
+    teamcityJavaHome = System.properties['java.home']
+}
+
+allprojects {
+    group = 'org.jetbrains.teamcity'
+    version = '1.0-SNAPSHOT'
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "http://repository.jetbrains.com/teamcity" }
+    }
+    configurations {
+        provided
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    dependencies {
+        provided(group: 'org.jetbrains.teamcity.idea', name: 'openapi', version: "95.677")
+        provided(group: 'org.jetbrains.teamcity.idea', name: 'annotations', version: "132.719")
+        provided(group: 'org.jetbrains.teamcity.idea', name: 'annotations', version: "132.719")
+        testCompile("org.jetbrains.teamcity:tests-support:${teamcityVersion}")
+    }
+    sourceCompatibility = "1.6"
+    targetCompatibility = "1.6"
+
+    test {
+        useTestNG()
+    }
+}
+
+project(':text-translators-agent') {
+    dependencies {
+        compile project(':regex-parser')
+    }
+}
+
+project(':text-translators-test') {
+    dependencies {
+        compile project(':text-translators-agent'), project(':regex-parser')
+    }
+}
+
+apply plugin: 'com.github.rodm.teamcity-server'
+apply plugin: 'idea'
+
+dependencies {
+    agent project(path: ':text-translators-agent', configuration: 'plugin')
+}
+
+teamcity {
+    version = teamcityVersion
+
+//    descriptor {
+//        name = project.name
+//        displayName = 'Process Output Parsers'
+//        version = project.version
+//        vendorName = 'JetBrains'
+//        description = 'Process Output Parsers'
+//        useSeparateClassloader = true
+//    }
+
+    descriptor = project.file('teamcity-server-plugin.xml')
+
+    homeDir = file(teamcityDir)
+    dataDir = file(teamcityDataDir)
+    javaHome = file(teamcityJavaHome)
+    serverOptions = '-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5500 -Dteamcity.oauthConnections.enabled=true -Dteamcity.development.mode=true -Dteamcity.development.shadowCopyClasses=true'
+}
+
+
+idea {
+    module {
+        downloadJavadoc = false
+        downloadSources = true
+    }
+}
+
+deployPlugin.dependsOn(build)
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.11'
+}

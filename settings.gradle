@@ -1,0 +1,6 @@
+rootProject.name='process-output-parsers'
+
+
+include 'regex-parser'
+include 'text-translators-agent'
+include 'text-translators-test'

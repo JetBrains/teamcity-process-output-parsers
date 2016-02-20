@@ -1,0 +1,31 @@
+apply plugin: 'com.github.rodm.teamcity-agent'
+
+teamcity {
+    version = teamcityVersion
+}
+
+dependencies {
+    provided("org.jetbrains.teamcity.internal:agent:${teamcityVersion}")
+
+    provided("org.jetbrains.teamcity.internal.generated:tests-integration:${teamcityVersion}")
+    provided("org.jetbrains.teamcity.internal.generated:server-logging:${teamcityVersion}")
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'src'
+        }
+        resources {
+            srcDir 'resources'
+        }
+    }
+    test {
+        java {
+            srcDir 'test'
+        }
+        resources {
+            srcDir 'testData'
+        }
+    }
+}

@@ -6,5 +6,6 @@
     <file url="file://$PROJECT_DIR$/regex-parser" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/text-translators-agent" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/text-translators-test" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

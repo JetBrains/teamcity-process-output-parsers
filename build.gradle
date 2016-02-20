@@ -99,16 +99,14 @@ dependencies {
 teamcity {
     version = teamcityVersion
 
-//    descriptor {
-//        name = project.name
-//        displayName = 'Process Output Parsers'
-//        version = project.version
-//        vendorName = 'JetBrains'
-//        description = 'Process Output Parsers'
-//        useSeparateClassloader = true
-//    }
-
-    descriptor = project.file('teamcity-server-plugin.xml')
+    descriptor {
+        name = "process-output-parsers"
+        displayName = 'Framework for process output parsers'
+        version = project.version
+        vendorName = 'JetBrains, s.r.o.'
+        vendorUrl = 'http://www.jetbrains.com'
+        useSeparateClassloader = true
+    }
 
     homeDir = file(teamcityDir)
     dataDir = file(teamcityDataDir)

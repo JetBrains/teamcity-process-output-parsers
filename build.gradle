@@ -73,6 +73,12 @@ subprojects {
                 }
             }
         }
+
+        repositories {
+            maven {
+                url "${rootProject.buildDir}/repo"
+            }
+        }
     }
 }
 

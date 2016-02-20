@@ -13,11 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.*
-
 import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
@@ -213,11 +208,21 @@ class ExportTCToLocalMavenTask extends DefaultTask {
     }
 }
 
-task exportTeamCityToMaven(type: ExportTCToLocalMavenTask) {
+task exportTeamCityToMaven(type: org.gradle.api.DefaultTask)
+
+task generatePoms(type: ExportTCToLocalMavenTask) {
     pathToTeamCityDistribution = file("${teamcityDir}");
     pathToGeneratedFilesDirectory = file("${teamcityGeneratedPoms}");
     useFirstFileIfConflict = true
     version = "${teamcityVersion}"
 }
 
-exportTeamCityToMaven.dependsOn("installTeamCity")
+task finishExport(type: Exec) {
+    workingDir = file("${teamcityGeneratedPoms}")
+    executable 'mvn'
+    args("-f", "install-pom.xml", "package")
+}
+
+generatePoms.dependsOn("installTeamCity")
+finishExport.dependsOn("generatePoms")
+exportTeamCityToMaven.dependsOn('finishExport')

@@ -208,7 +208,6 @@ class ExportTCToLocalMavenTask extends DefaultTask {
     }
 }
 
-task exportTeamCityToMaven(type: org.gradle.api.DefaultTask)
 
 task generatePoms(type: ExportTCToLocalMavenTask) {
     pathToTeamCityDistribution = file("${teamcityDir}");
@@ -217,12 +216,14 @@ task generatePoms(type: ExportTCToLocalMavenTask) {
     version = "${teamcityVersion}"
 }
 
-task finishExport(type: Exec) {
+task installGeneratedPoms(type: Exec, dependsOn: generatePoms) {
     workingDir = file("${teamcityGeneratedPoms}")
     executable 'mvn'
     args("-f", "install-pom.xml", "package")
 }
 
-generatePoms.dependsOn("installTeamCity")
-finishExport.dependsOn("generatePoms")
-exportTeamCityToMaven.dependsOn('finishExport')
+task exportTeamCityToMaven(type: org.gradle.api.DefaultTask, dependsOn: installGeneratedPoms)
+
+if (project.tasks.findByName("installTeamCity") != null) {
+    generatePoms.dependsOn("installTeamCity")
+}

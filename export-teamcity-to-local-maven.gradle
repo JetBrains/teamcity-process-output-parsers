@@ -224,6 +224,6 @@ task installGeneratedPoms(type: Exec, dependsOn: generatePoms) {
 
 task exportTeamCityToMaven(type: org.gradle.api.DefaultTask, dependsOn: installGeneratedPoms)
 
-if (project.tasks.findByName("installTeamCity") != null) {
+if (teamcityInstall == true && project.tasks.findByName("installTeamCity") != null) {
     generatePoms.dependsOn("installTeamCity")
 }

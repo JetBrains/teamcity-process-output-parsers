@@ -23,7 +23,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-class ExportTCToLocalMaven extends DefaultTask {
+class ExportTCToLocalMavenTask extends DefaultTask {
     @InputDirectory
     def File pathToTeamCityDistribution
 
@@ -77,6 +77,9 @@ class ExportTCToLocalMaven extends DefaultTask {
                         if (Files.size(prev) != Files.size(current)) {
                             println((useFirstFileIfConflict ? "WARN:" : "ERROR:") + " Jars map already have key '${it.name}' and files size is differrent. Paths:\n\t${prev}\n\t${current}")
                             error |= !useFirstFileIfConflict;
+                            if (useFirstFileIfConflict) {
+                                jars.put("${Files.size(current)}.${it.name}", current);
+                            }
                         } else if (verbose) {
                             println "WARN: Jars map already have key '${it.name}' with same file, but ifferent path. Paths:\n\t${prev}\n\t${current}"
                         }
@@ -98,8 +101,9 @@ class ExportTCToLocalMaven extends DefaultTask {
         def dependencies = new ArrayList<String>();
 
         def install = new ArrayList<Tuple>()
-        for (Path jar : jars.values()) {
-            def name = jar.getFileName().toString()
+        for (Map.Entry<String, Path> entry : jars.entrySet()) {
+            def name = entry.key
+            def jar = entry.value
             def artifactId = name.substring(0, name.length() - 4)
             String pomContent = """
 <project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -209,11 +213,11 @@ class ExportTCToLocalMaven extends DefaultTask {
     }
 }
 
-task 'export-teamcity-to-maven'(type: ExportTCToLocalMaven) {
-    def p = System.getProperty("TeamCityDistribution")
-    if (p == null) throw new StopExecutionException("'TeamCityDistribution' system property required")
-    pathToTeamCityDistribution = file(p);
-    pathToGeneratedFilesDirectory = file(System.getProperty("GeneratedOutputPath", "generated"));
+task exportTeamCityToMaven(type: ExportTCToLocalMavenTask) {
+    pathToTeamCityDistribution = file("${teamcityDir}");
+    pathToGeneratedFilesDirectory = file("${teamcityGeneratedPoms}");
     useFirstFileIfConflict = true
-    version = System.getProperty("TeamCityVersion", "SNAPSHOT")
+    version = "${teamcityVersion}"
 }
+
+exportTeamCityToMaven.dependsOn("installTeamCity")

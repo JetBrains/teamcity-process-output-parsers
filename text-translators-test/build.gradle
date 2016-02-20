@@ -5,6 +5,8 @@ teamcity {
 }
 
 dependencies {
+    compile project(':text-translators-agent'), project(':regex-parser')
+
     provided("org.jetbrains.teamcity.internal:agent:${teamcityVersion}")
 
     provided("org.jetbrains.teamcity.internal.generated:tests-integration:${teamcityVersion}")

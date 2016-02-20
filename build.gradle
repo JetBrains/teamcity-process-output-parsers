@@ -16,6 +16,7 @@ ext {
     teamcityDir = "$rootDir/servers/TeamCity-${teamcityVersion}"
     teamcityDataDir = "$rootDir/data/" + (teamcityVersion =~ /(\d+\.\d+).*/)[0][1]
     teamcityJavaHome = System.properties['java.home']
+    teamcityGeneratedPoms = "$buildDir/generated-poms"
 }
 
 allprojects {
@@ -48,20 +49,9 @@ subprojects {
     }
 }
 
-project(':text-translators-agent') {
-    dependencies {
-        compile project(':regex-parser')
-    }
-}
-
-project(':text-translators-test') {
-    dependencies {
-        compile project(':text-translators-agent'), project(':regex-parser')
-    }
-}
-
 apply plugin: 'com.github.rodm.teamcity-server'
 apply plugin: 'idea'
+apply from: 'export-teamcity-to-local-maven.gradle'
 
 dependencies {
     agent project(path: ':text-translators-agent', configuration: 'plugin')

@@ -16,8 +16,7 @@ dependencies {
 
     provided("org.jetbrains.teamcity.internal:agent:${teamcityVersion}")
 
-    provided("org.jetbrains.teamcity.internal.generated:server-logging:${teamcityVersion}")
-    testCompile("org.jetbrains.teamcity.internal.generated:tests-integration:${teamcityVersion}")
+    provided files("$teamcityDir/buildAgent/lib/server-logging.jar")
 }
 
 test {
@@ -41,4 +40,8 @@ sourceSets {
             srcDir 'testData'
         }
     }
+}
+
+if (teamcityInstall == true) {
+    test.dependsOn(rootProject.tasks.findByName('installTeamCity'))
 }

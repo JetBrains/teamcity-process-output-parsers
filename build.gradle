@@ -18,11 +18,12 @@ ext {
     teamcityJavaHome = System.properties['java.home']
     teamcityGeneratedPoms = "$buildDir/generated-poms"
     teamcityInstall = project.hasProperty("teamcityInstall") ? project.getProperty("teamcityInstall") : false
+    teamcityPluginVersion = project.hasProperty("teamcityPluginVersion") ? project.getProperty("teamcityPluginVersion") : 'SNAPSHOT'
 }
 
 allprojects {
     group = 'org.jetbrains.teamcity.output_parser'
-    version = '1.0-SNAPSHOT'
+    version = teamcityPluginVersion
 
     repositories {
         mavenLocal()

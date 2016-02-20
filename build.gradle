@@ -20,7 +20,7 @@ ext {
 }
 
 allprojects {
-    group = 'org.jetbrains.teamcity'
+    group = 'org.jetbrains.teamcity.output_parser'
     version = '1.0-SNAPSHOT'
 
     repositories {
@@ -36,9 +36,6 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     dependencies {
-        provided(group: 'org.jetbrains.teamcity.idea', name: 'openapi', version: "95.677")
-        provided(group: 'org.jetbrains.teamcity.idea', name: 'annotations', version: "132.719")
-        provided(group: 'org.jetbrains.teamcity.idea', name: 'annotations', version: "132.719")
         testCompile("org.jetbrains.teamcity:tests-support:${teamcityVersion}")
     }
     sourceCompatibility = "1.6"
@@ -46,6 +43,36 @@ subprojects {
 
     test {
         useTestNG()
+    }
+
+    apply plugin: 'maven-publish'
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allJava
+    }
+
+    task testsSourcesJar(type: Jar) {
+        from sourceSets.test.allJava
+
+    }
+    task testsJar(type: Jar) {
+        from sourceSets.test.output
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                artifact sourcesJar {
+                    classifier "sources"
+                }
+                artifact testsSourcesJar {
+                    classifier "test-sources"
+                }
+                artifact testsJar {
+                    classifier "test"
+                }
+            }
+        }
     }
 }
 

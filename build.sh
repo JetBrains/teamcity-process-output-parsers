@@ -1,3 +1,3 @@
 #!/bin/bash
-targets="${@:-clean test package}"
+targets="${@:-clean test build}"
 ./gradlew -DteamcityVersion=SNAPSHOT ${targets}

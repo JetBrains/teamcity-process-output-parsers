@@ -1,11 +1,29 @@
-.idea/workspace.xml
 out
 teamcity-raw
 target/
 generated/
 
-# IDEA libraries (generated from pom)
+### JetBrains template
+# User-specific stuff:
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+.idea/vcs.xml
+.idea/jsLibraryMappings.xml
+
+# Sensitive or high-churn files:
+.idea/dataSources.ids
+.idea/dataSources.xml
+.idea/dataSources.local.xml
+.idea/sqlDataSources.xml
+.idea/dynamic.xml
+.idea/uiDesigner.xml
+
+# Gradle:
+.idea/gradle.xml
 .idea/libraries/
+
+*.iws
 # Exclude IDEA modules
 .idea/modules.xml
 *.iml
@@ -19,3 +37,6 @@ gradle-app.setting
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache

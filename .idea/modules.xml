@@ -2,10 +2,16 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/process-output-parsers.iml" filepath="$PROJECT_DIR$/process-output-parsers.iml" />
-      <module fileurl="file://$PROJECT_DIR$/regex-parser/regex-parser.iml" filepath="$PROJECT_DIR$/regex-parser/regex-parser.iml" />
-      <module fileurl="file://$PROJECT_DIR$/text-translators-agent/text-translators-agent.iml" filepath="$PROJECT_DIR$/text-translators-agent/text-translators-agent.iml" />
-      <module fileurl="file://$PROJECT_DIR$/text-translators-test/text-translators-test.iml" filepath="$PROJECT_DIR$/text-translators-test/text-translators-test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/process-output-parsers.iml" filepath="$PROJECT_DIR$/.idea/modules/process-output-parsers.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/regex-parser/regex-parser.iml" filepath="$PROJECT_DIR$/.idea/modules/regex-parser/regex-parser.iml" group="regex-parser" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/regex-parser/regex-parser_main.iml" filepath="$PROJECT_DIR$/.idea/modules/regex-parser/regex-parser_main.iml" group="regex-parser" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/regex-parser/regex-parser_test.iml" filepath="$PROJECT_DIR$/.idea/modules/regex-parser/regex-parser_test.iml" group="regex-parser" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/text-translators-agent/text-translators-agent.iml" filepath="$PROJECT_DIR$/.idea/modules/text-translators-agent/text-translators-agent.iml" group="text-translators-agent" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/text-translators-agent/text-translators-agent_main.iml" filepath="$PROJECT_DIR$/.idea/modules/text-translators-agent/text-translators-agent_main.iml" group="text-translators-agent" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/text-translators-agent/text-translators-agent_test.iml" filepath="$PROJECT_DIR$/.idea/modules/text-translators-agent/text-translators-agent_test.iml" group="text-translators-agent" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/text-translators-test/text-translators-test.iml" filepath="$PROJECT_DIR$/.idea/modules/text-translators-test/text-translators-test.iml" group="text-translators-test" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/text-translators-test/text-translators-test_main.iml" filepath="$PROJECT_DIR$/.idea/modules/text-translators-test/text-translators-test_main.iml" group="text-translators-test" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/text-translators-test/text-translators-test_test.iml" filepath="$PROJECT_DIR$/.idea/modules/text-translators-test/text-translators-test_test.iml" group="text-translators-test" />
     </modules>
   </component>
 </project>

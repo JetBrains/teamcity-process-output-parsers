@@ -16,6 +16,7 @@
 
 package jetbrains.teamcity.util.regex;
 
+import com.intellij.openapi.util.NotNullLazyValue;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
@@ -114,6 +115,14 @@ public class RegexParser {
     return XStreamWrapper.serializeObject(this, createXStreamHolder());
   }
 
+  private static final NotNullLazyValue<XStreamHolder> ourXStreamHolder = (new NotNullLazyValue<XStreamHolder>() {
+    @NotNull
+    @Override
+    protected XStreamHolder compute() {
+      return createXStreamHolder();
+    }
+  });
+
   @Nullable
   public static RegexParser deserialize(@NotNull final InputStream serialized) throws IOException {
     final StringBuilder sb = new StringBuilder();
@@ -132,7 +141,7 @@ public class RegexParser {
     if (xml.isEmpty()) {
       return null;
     } else {
-      return XStreamWrapper.deserializeObject(RegexParser.class.getClassLoader(), xml, createXStreamHolder());
+      return XStreamWrapper.deserializeObject(RegexParser.class.getClassLoader(), xml, ourXStreamHolder.getValue());
     }
   }
 

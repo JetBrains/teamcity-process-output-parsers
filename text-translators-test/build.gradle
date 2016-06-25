@@ -32,6 +32,12 @@ sourceSets {
     }
 }
 
+test {
+    useTestNG() {
+        suites 'testng.xml'
+    }
+}
+
 if (teamcityInstall == true) {
     test.dependsOn(rootProject.tasks.findByName('installTeamcity91'))
 }

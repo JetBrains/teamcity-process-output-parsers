@@ -22,3 +22,9 @@ sourceSets {
         }
     }
 }
+
+test {
+    useTestNG() {
+        suites 'testng.xml'
+    }
+}

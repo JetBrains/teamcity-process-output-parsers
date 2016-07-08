@@ -33,5 +33,5 @@ sourceSets {
 }
 
 if (teamcityInstall == true) {
-    test.dependsOn(rootProject.tasks.findByName('installTeamCity'))
+    test.dependsOn(rootProject.tasks.findByName('installTeamcity91'))
 }

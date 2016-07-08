@@ -97,19 +97,25 @@ dependencies {
 teamcity {
     version = teamcityVersion
 
-    descriptor {
-        name = "process-output-parsers"
-        displayName = 'Framework for process output parsers'
-        version = project.version
-        vendorName = 'JetBrains, s.r.o.'
-        vendorUrl = 'http://www.jetbrains.com'
-        useSeparateClassloader = true
-    }
+    server {
+        descriptor {
+            name = "process-output-parsers"
+            displayName = 'Framework for process output parsers'
+            version = project.version
+            vendorName = 'JetBrains, s.r.o.'
+            vendorUrl = 'http://www.jetbrains.com'
+            useSeparateClassloader = true
+        }
 
-    homeDir = file(teamcityDir)
-    dataDir = file(teamcityDataDir)
-    javaHome = file(teamcityJavaHome)
-    serverOptions = '-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5500 -Dteamcity.oauthConnections.enabled=true -Dteamcity.development.mode=true -Dteamcity.development.shadowCopyClasses=true'
+        environments {
+            teamcity91 {
+                homeDir = file(teamcityDir)
+                dataDir = file(teamcityDataDir)
+                javaHome = file(teamcityJavaHome)
+                serverOptions = '-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5500 -Dteamcity.oauthConnections.enabled=true -Dteamcity.development.mode=true -Dteamcity.development.shadowCopyClasses=true'
+            }
+        }
+    }
 }
 
 

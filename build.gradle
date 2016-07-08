@@ -107,7 +107,9 @@ teamcity {
                 homeDir = file(teamcityDir)
                 dataDir = file(teamcityDataDir)
                 javaHome = file(teamcityJavaHome)
-                serverOptions = '-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5500 -Dteamcity.oauthConnections.enabled=true -Dteamcity.development.mode=true -Dteamcity.development.shadowCopyClasses=true'
+                serverOptions '-Xdebug'
+                serverOptions '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5500'
+                serverOptions '-Dteamcity.oauthConnections.enabled=true'
             }
         }
     }

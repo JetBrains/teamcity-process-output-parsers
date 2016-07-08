@@ -28,7 +28,7 @@ allprojects {
     }
 
     if (!teamcityInstall) {
-        project.tasks.findByName("downloadTeamCity")*.setEnabled(false)
+        project.tasks.findByName("downloadTeamcity91")*.setEnabled(false)
     }
 }
 

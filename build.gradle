@@ -1,6 +1,5 @@
 buildscript {
     repositories {
-        mavenCentral()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
@@ -24,10 +23,6 @@ allprojects {
     group = 'org.jetbrains.teamcity.output_parser'
     version = teamcityPluginVersion
 
-    repositories {
-        mavenCentral()
-        maven { url "http://download.jetbrains.com/teamcity-repository" }
-    }
     configurations {
         provided
     }

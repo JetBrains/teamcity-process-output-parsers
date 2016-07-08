@@ -40,3 +40,8 @@ gradle-app.setting
 
 # Cache of project
 .gradletasknamecache
+
+# gradle-teamcity-plugin
+data/
+downloads/
+servers/

@@ -9,14 +9,22 @@ buildscript {
     }
 }
 
+if (PluginVersion == null || "" == PluginVersion) {
+    version = TeamCityVersion
+} else {
+    version = "$PluginVersion"
+}
+
 ext {
-    teamcityVersion = project.hasProperty('teamcityVersion') ? project.getProperty('teamcityVersion') : '9.1.6'
-    teamcityDir = project.hasProperty('teamcityDir') ? project.getProperty('teamcityDir') : "$rootDir/servers/TeamCity-${teamcityVersion}"
-    teamcityDataDir = "$rootDir/data/" + (teamcityVersion =~ /(\d+\.\d+).*/)[0][1]
+    teamcityDir = "$rootDir/servers/TeamCity-${TeamCityVersion}"
+    teamcityDataDir = "$rootDir/data/" + (
+            (TeamCityVersion ==~ /(\d+\.\d+).*/) ?
+                    ((TeamCityVersion =~ /(\d+\.\d+).*/)[0][1])
+                    : TeamCityVersion
+    )
     teamcityJavaHome = System.properties['java.home']
     teamcityGeneratedPoms = "$buildDir/generated-poms"
     teamcityInstall = project.hasProperty("teamcityInstall") ? project.getProperty("teamcityInstall") : false
-    teamcityPluginVersion = project.hasProperty("teamcityPluginVersion") ? project.getProperty("teamcityPluginVersion") : 'SNAPSHOT'
 }
 
 allprojects {
@@ -35,7 +43,7 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     dependencies {
-        testCompile("org.jetbrains.teamcity:tests-support:${teamcityVersion}")
+        testCompile("org.jetbrains.teamcity:tests-support:${TeamCityVersion}")
     }
     sourceCompatibility = "1.6"
     targetCompatibility = "1.6"
@@ -51,8 +59,8 @@ subprojects {
 
     task testsSourcesJar(type: Jar) {
         from sourceSets.test.allJava
-
     }
+
     task testsJar(type: Jar) {
         from sourceSets.test.output
     }
@@ -90,7 +98,7 @@ dependencies {
 }
 
 teamcity {
-    version = teamcityVersion
+    version = TeamCityVersion
 
     server {
         descriptor {

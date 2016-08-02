@@ -213,7 +213,7 @@ task generatePoms(type: ExportTCToLocalMavenTask) {
     pathToTeamCityDistribution = file("${teamcityDir}");
     pathToGeneratedFilesDirectory = file("${teamcityGeneratedPoms}");
     useFirstFileIfConflict = true
-    version = "${teamcityVersion}"
+    version = "${TeamCityVersion}"
 }
 
 task installGeneratedPoms(type: Exec, dependsOn: generatePoms) {

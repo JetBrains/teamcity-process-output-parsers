@@ -1,13 +1,13 @@
 apply plugin: 'com.github.rodm.teamcity-agent'
 
 teamcity {
-    version = teamcityVersion
+    version = TeamCityVersion
 }
 
 dependencies {
     compile project(':text-translators-agent'), project(':regex-parser')
 
-    provided("org.jetbrains.teamcity.internal:agent:${teamcityVersion}")
+    provided("org.jetbrains.teamcity.internal:agent:${TeamCityVersion}")
 
     provided files("$teamcityDir/buildAgent/lib/server-logging.jar")
     provided files("$teamcityDir/devPackage/tests/tests-integration.jar")

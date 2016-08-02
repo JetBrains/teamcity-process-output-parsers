@@ -1,7 +1,7 @@
 apply plugin: 'com.github.rodm.teamcity-agent'
 
 teamcity {
-    version = teamcityVersion
+    version = TeamCityVersion
 
     descriptor {
         pluginDeployment {
@@ -13,7 +13,7 @@ teamcity {
 dependencies {
     compile project(':regex-parser')
 
-    provided("org.jetbrains.teamcity.internal:agent:${teamcityVersion}")
+    provided("org.jetbrains.teamcity.internal:agent:${TeamCityVersion}")
 
     provided files("$teamcityDir/buildAgent/lib/server-logging.jar")
 }

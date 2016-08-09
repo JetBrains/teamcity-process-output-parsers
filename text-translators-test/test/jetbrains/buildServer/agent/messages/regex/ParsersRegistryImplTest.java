@@ -21,6 +21,7 @@ import jetbrains.buildServer.agent.AgentLifeCycleListener;
 import jetbrains.buildServer.agent.CurrentBuildTracker;
 import jetbrains.buildServer.agent.impl.CurrentBuildTrackerImpl;
 import jetbrains.buildServer.agent.messages.impl.TranslatorsRegistryImpl;
+import jetbrains.buildServer.agent.messages.regex.impl.ParserLoaderImpl;
 import jetbrains.buildServer.agent.messages.regex.impl.ParsersRegistryImpl;
 import jetbrains.buildServer.serverSide.BasePropertiesModel;
 import jetbrains.buildServer.serverSide.TeamCityProperties;
@@ -58,7 +59,7 @@ public class ParsersRegistryImplTest extends BaseTestCase {
     myEventDispatcher = EventDispatcher.create(AgentLifeCycleListener.class);
     myCurrentBuildTracker = new CurrentBuildTrackerImpl(myEventDispatcher);
     myTranslatorsRegistry = new TranslatorsRegistryImpl();
-    myParserLoader = new ParserLoader(myCurrentBuildTracker);
+    myParserLoader = new ParserLoaderImpl(myCurrentBuildTracker);
     myParsersRegistry = new ParsersRegistryImpl(myTranslatorsRegistry, myParserLoader);
   }
 

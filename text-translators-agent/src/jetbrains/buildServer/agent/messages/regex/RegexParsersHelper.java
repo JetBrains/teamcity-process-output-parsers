@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package jetbrains.buildServer.agent.messages.regex;
 
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.teamcity.util.regex.ParserLoader;
+import jetbrains.teamcity.util.regex.ParserLoadingException;
 import jetbrains.teamcity.util.regex.RegexParser;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +27,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class RegexParsersHelper {
-  public static RegexParser loadParserFromFile(@NotNull final File file) {
+  public static RegexParser loadParserFromFile(@NotNull final File file) throws FileNotFoundException, ParserLoadingException {
     if (file.exists() && file.isFile()) {
       FileInputStream fis = null;
       try {
@@ -35,15 +36,14 @@ public class RegexParsersHelper {
         if (regexParser != null) {
           return (regexParser);
         }
-      } catch (final FileNotFoundException ignored) {
       } finally {
         FileUtil.close(fis);
       }
     }
-    return null;
+    throw new FileNotFoundException(file.getAbsolutePath());
   }
 
-  public static RegexParser loadParserFromResource(@NotNull final String path) {
+  public static RegexParser loadParserFromResource(@NotNull final String path) throws FileNotFoundException, ParserLoadingException {
     return ParserLoader.loadParser(path, Thread.currentThread().getContextClassLoader());
   }
 }

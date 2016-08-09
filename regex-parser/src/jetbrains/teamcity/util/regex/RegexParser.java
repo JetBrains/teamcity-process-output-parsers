@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,9 @@
 package jetbrains.teamcity.util.regex;
 
 import com.intellij.openapi.util.NotNullLazyValue;
+import com.intellij.openapi.util.io.StreamUtil;
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.XStreamException;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
@@ -124,24 +126,21 @@ public class RegexParser {
   });
 
   @Nullable
-  public static RegexParser deserialize(@NotNull final InputStream serialized) throws IOException {
-    final StringBuilder sb = new StringBuilder();
-    StringUtil.processLines(serialized, new StringUtil.LineProcessor() {
-      public boolean processLine(final String line) {
-        sb.append(line);
-        return false;
-      }
-    });
-    return deserialize(sb.toString());
+  public static RegexParser deserialize(@NotNull final InputStream serialized) throws IOException, ParserLoadingException {
+    return deserialize(StreamUtil.readText(serialized, "UTF-8"));
   }
 
 
   @Nullable
-  public static RegexParser deserialize(@NotNull final String xml) {
+  public static RegexParser deserialize(@NotNull final String xml) throws ParserLoadingException {
     if (xml.isEmpty()) {
       return null;
     } else {
-      return XStreamWrapper.deserializeObject(RegexParser.class.getClassLoader(), xml, ourXStreamHolder.getValue());
+      try {
+        return XStreamWrapper.deserializeObject(RegexParser.class.getClassLoader(), xml, ourXStreamHolder.getValue());
+      } catch (XStreamException e) {
+        throw new ParserLoadingException("Cannot deserialize parser configuration: " + e.getMessage(), e);
+      }
     }
   }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package jetbrains.teamcity.util.regex;
 
-import jetbrains.buildServer.util.StringUtil;
-import org.apache.log4j.Logger;
+import com.intellij.openapi.diagnostic.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -30,35 +30,38 @@ import java.io.InputStream;
  */
 public class ParserLoader {
   @NotNull
-  private static final Logger LOG = Logger.getLogger(ParserLoader.class);
+  private static final Logger LOG = Logger.getInstance(ParserLoader.class.getName());
 
   @Nullable
-  public static RegexParser loadParser(@NotNull final String configResourceName, @NotNull final Class clazz) {
+  public static RegexParser loadParser(@NotNull final String configResourceName, @NotNull final Class clazz) throws FileNotFoundException, ParserLoadingException {
     final InputStream parserConfigStream = clazz.getResourceAsStream(configResourceName);
     if (parserConfigStream == null) {
-      LOG.warn("Specified parser configuration resource not found (" + configResourceName + ")");
-      return null;
+      String message = "Specified parser configuration resource not found (" + configResourceName + ")";
+      LOG.warn(message);
+      throw new FileNotFoundException(message);
     }
     return loadParser(parserConfigStream);
   }
 
   @Nullable
-  public static RegexParser loadParser(@NotNull final String configResourceName, @NotNull final ClassLoader classLoader) {
+  public static RegexParser loadParser(@NotNull final String configResourceName, @NotNull final ClassLoader classLoader) throws FileNotFoundException, ParserLoadingException {
     final InputStream parserConfigStream = classLoader.getResourceAsStream(configResourceName);
     if (parserConfigStream == null) {
-      LOG.warn("Specified parser configuration resource not found (" + configResourceName + ")");
-      return null;
+      String message = "Specified parser configuration resource not found (" + configResourceName + ")";
+      LOG.warn(message);
+      throw new FileNotFoundException(message);
     }
     return loadParser(parserConfigStream);
   }
 
   @Nullable
-  public static RegexParser loadParser(@NotNull final InputStream parserConfigStream) {
-    RegexParser parser = null;
+  public static RegexParser loadParser(@NotNull final InputStream parserConfigStream) throws ParserLoadingException {
+    RegexParser parser;
     try {
       parser = RegexParser.deserialize(parserConfigStream);
     } catch (final IOException e) {
-      LOG.warn("Reading configuration fail: " + StringUtil.stackTrace(e));
+      LOG.warnAndDebugDetails("Failed to read parser configuration", e);
+      throw new ParserLoadingException("Failed to read parser configuration: " + e.getMessage());
     }
     return parser;
   }

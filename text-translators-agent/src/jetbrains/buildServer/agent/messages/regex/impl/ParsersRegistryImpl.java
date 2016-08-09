@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +79,12 @@ public class ParsersRegistryImpl implements ParsersRegistry {
         return;
       }
     }
-    final RegexParser parser = myLoader.load(parserId);
+    RegexParser parser = null;
+    try {
+      parser = myLoader.load(parserId);
+    } catch (Exception e) {
+      LOG.warn("Failed to load parser: " + e.getMessage());
+    }
     if (parser != null) {
       myParsersHistory.put(parserId, parser.getName());
       register(parser.getName(), parser);

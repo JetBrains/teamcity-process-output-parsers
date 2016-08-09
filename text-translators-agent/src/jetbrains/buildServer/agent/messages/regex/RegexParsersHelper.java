@@ -27,15 +27,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class RegexParsersHelper {
+  @NotNull
   public static RegexParser loadParserFromFile(@NotNull final File file) throws FileNotFoundException, ParserLoadingException {
     if (file.exists() && file.isFile()) {
       FileInputStream fis = null;
       try {
         fis = new FileInputStream(file);
-        final RegexParser regexParser = ParserLoader.loadParser(fis);
-        if (regexParser != null) {
-          return (regexParser);
-        }
+        return ParserLoader.loadParser(fis);
       } finally {
         FileUtil.close(fis);
       }
@@ -43,6 +41,7 @@ public class RegexParsersHelper {
     throw new FileNotFoundException(file.getAbsolutePath());
   }
 
+  @NotNull
   public static RegexParser loadParserFromResource(@NotNull final String path) throws FileNotFoundException, ParserLoadingException {
     return ParserLoader.loadParser(path, Thread.currentThread().getContextClassLoader());
   }

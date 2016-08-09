@@ -18,7 +18,6 @@ package jetbrains.teamcity.util.regex;
 
 import com.intellij.openapi.diagnostic.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,7 +31,7 @@ public class ParserLoader {
   @NotNull
   private static final Logger LOG = Logger.getInstance(ParserLoader.class.getName());
 
-  @Nullable
+  @NotNull
   public static RegexParser loadParser(@NotNull final String configResourceName, @NotNull final Class clazz) throws FileNotFoundException, ParserLoadingException {
     final InputStream parserConfigStream = clazz.getResourceAsStream(configResourceName);
     if (parserConfigStream == null) {
@@ -43,7 +42,7 @@ public class ParserLoader {
     return loadParser(parserConfigStream);
   }
 
-  @Nullable
+  @NotNull
   public static RegexParser loadParser(@NotNull final String configResourceName, @NotNull final ClassLoader classLoader) throws FileNotFoundException, ParserLoadingException {
     final InputStream parserConfigStream = classLoader.getResourceAsStream(configResourceName);
     if (parserConfigStream == null) {
@@ -54,15 +53,13 @@ public class ParserLoader {
     return loadParser(parserConfigStream);
   }
 
-  @Nullable
+  @NotNull
   public static RegexParser loadParser(@NotNull final InputStream parserConfigStream) throws ParserLoadingException {
-    RegexParser parser;
     try {
-      parser = RegexParser.deserialize(parserConfigStream);
+      return RegexParser.deserialize(parserConfigStream);
     } catch (final IOException e) {
       LOG.warnAndDebugDetails("Failed to read parser configuration", e);
       throw new ParserLoadingException("Failed to read parser configuration: " + e.getMessage());
     }
-    return parser;
   }
 }

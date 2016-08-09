@@ -27,7 +27,6 @@ import jetbrains.buildServer.messages.XStreamHolder;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.xstream.XStreamWrapper;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -125,22 +124,25 @@ public class RegexParser {
     }
   });
 
-  @Nullable
+  @NotNull
   public static RegexParser deserialize(@NotNull final InputStream serialized) throws IOException, ParserLoadingException {
     return deserialize(StreamUtil.readText(serialized, "UTF-8"));
   }
 
 
-  @Nullable
+  @NotNull
   public static RegexParser deserialize(@NotNull final String xml) throws ParserLoadingException {
     if (xml.isEmpty()) {
-      return null;
-    } else {
-      try {
-        return XStreamWrapper.deserializeObject(RegexParser.class.getClassLoader(), xml, ourXStreamHolder.getValue());
-      } catch (XStreamException e) {
-        throw new ParserLoadingException("Cannot deserialize parser configuration: " + e.getMessage(), e);
+      throw new ParserLoadingException("Parser configuration xml is empty");
+    }
+    try {
+      RegexParser parser = XStreamWrapper.deserializeObject(RegexParser.class.getClassLoader(), xml, ourXStreamHolder.getValue());
+      if (parser == null) {
+        throw new ParserLoadingException("Loaded parser is null");
       }
+      return parser;
+    } catch (XStreamException e) {
+      throw new ParserLoadingException("Cannot deserialize parser configuration: " + e.getMessage(), e);
     }
   }
 

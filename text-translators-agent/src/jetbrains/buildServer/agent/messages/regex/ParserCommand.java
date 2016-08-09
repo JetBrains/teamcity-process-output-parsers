@@ -104,6 +104,28 @@ public abstract class ParserCommand {
     public static ParserId byFilePath(@NotNull final String path) {
       return new ParserId(null, null, path);
     }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+
+      ParserId parserId = (ParserId) o;
+
+      if (myName != null ? !myName.equals(parserId.myName) : parserId.myName != null) return false;
+      if (myResourcePath != null ? !myResourcePath.equals(parserId.myResourcePath) : parserId.myResourcePath != null)
+        return false;
+      return myFile != null ? myFile.equals(parserId.myFile) : parserId.myFile == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+      int result = myName != null ? myName.hashCode() : 0;
+      result = 31 * result + (myResourcePath != null ? myResourcePath.hashCode() : 0);
+      result = 31 * result + (myFile != null ? myFile.hashCode() : 0);
+      return result;
+    }
   }
 
   public abstract static class CommandWithScope extends ParserCommand {

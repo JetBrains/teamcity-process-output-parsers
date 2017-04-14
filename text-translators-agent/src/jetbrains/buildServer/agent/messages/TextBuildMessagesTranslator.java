@@ -46,15 +46,11 @@ public class TextBuildMessagesTranslator implements BuildMessagesTranslator {
 
   private final AtomicReference<BuildRunnerContext> myActiveRunner;
   @NotNull
-  private final CurrentBuildTrackerEx myCurrentBuildTracker;
-  @NotNull
   private final TranslatorsRegistry myTranslatorsRegistry;
   private boolean mySuspendServiceMessages = false;
 
   public TextBuildMessagesTranslator(@NotNull final EventDispatcher<AgentLifeCycleListener> dispatcher,
-                                     @NotNull final CurrentBuildTrackerEx currentBuildTracker,
                                      @NotNull final TranslatorsRegistry registry) {
-    myCurrentBuildTracker = currentBuildTracker;
     myTranslatorsRegistry = registry;
     myActiveRunner = new AtomicReference<BuildRunnerContext>();
 
@@ -75,75 +71,74 @@ public class TextBuildMessagesTranslator implements BuildMessagesTranslator {
       }
     });
   }
-
   @NotNull
-  public List<BuildMessage1> translate(@NotNull final BuildMessage1 message) {
-    final List<BuildMessage1> origin = Collections.singletonList(message);
-    if (!myCurrentBuildTracker.isRunningBuild()) {
-      return origin;
-    }
-    final AgentRunningBuildEx build = myCurrentBuildTracker.getCurrentBuild();
-    final BuildLogTail tail = build.getBuildLogTail();
+  @Override
+  public List<BuildMessage1> translateMessages(@NotNull final AgentRunningBuild build, @NotNull final List<BuildMessage1> messages) {
+    final BuildLogTail tail = ((AgentRunningBuildEx) build).getBuildLogTail();
     if (!String.valueOf(build.getBuildId()).equals(tail.getBuildId())) {
-      return origin;
+      return messages;
     }
     // Only text messages processed
-    if (!DefaultMessagesInfo.MSG_TEXT.equals(message.getTypeId())) {
-      return origin;
+    for (BuildMessage1 message : messages) {
+      if (!DefaultMessagesInfo.MSG_TEXT.equals(message.getTypeId())) {
+        return messages;
+      }
     }
 
-    final List<SimpleMessagesTranslator> translators = getAllTranslators(build);
+    final ArrayList<BuildMessage1> result = new ArrayList<BuildMessage1>(messages.size());
+    final List<SimpleMessagesTranslator> translators = getAllTranslators((AgentRunningBuildEx) build);
 
-    final BuildMessage1[] translated = {message};
-    final List<BuildMessage1> newMessages = new ArrayList<BuildMessage1>();
 
-    ServiceMessagesProcessor.processTextMessage(message, new AbstractTextMessageProcessor() {
-      public void processServiceMessage(final @NotNull ServiceMessage serviceMessage, final @NotNull BuildMessage1 originalMessage) {
-        if (ServiceMessage.DISABLE.equals(serviceMessage.getMessageName())) {
-          mySuspendServiceMessages = true;
-          return;
-        }
-        if (ServiceMessage.ENABLE.equals(serviceMessage.getMessageName())) {
-          mySuspendServiceMessages = false;
-          return;
-        }
-        if (mySuspendServiceMessages) return;
+    for (BuildMessage1 message : messages) {
+      final boolean[] keep = {true};
+      final List<BuildMessage1> additional = new ArrayList<BuildMessage1>();
 
-        for (SimpleMessagesTranslator simpleMessagesTranslator : translators) {
-          final SimpleMessagesTranslator.Result result = simpleMessagesTranslator.doProcessMessage(serviceMessage, tail);
-          if (!result.isConsumed()) continue;
-          newMessages.addAll(result.getMessages());
-          if (!result.isKeepOrigin()) {
-            translated[0] = null;
-            break;
+      ServiceMessagesProcessor.processTextMessage(message, new AbstractTextMessageProcessor() {
+        public void processServiceMessage(final @NotNull ServiceMessage serviceMessage, final @NotNull BuildMessage1 originalMessage) {
+          if (ServiceMessage.DISABLE.equals(serviceMessage.getMessageName())) {
+            mySuspendServiceMessages = true;
+            return;
+          }
+          if (ServiceMessage.ENABLE.equals(serviceMessage.getMessageName())) {
+            mySuspendServiceMessages = false;
+            return;
+          }
+          if (mySuspendServiceMessages) return;
+
+          for (SimpleMessagesTranslator simpleMessagesTranslator : translators) {
+            final SimpleMessagesTranslator.Result result1 = simpleMessagesTranslator.doProcessMessage(serviceMessage, tail);
+            if (!result1.isConsumed()) continue;
+            additional.addAll(result1.getMessages());
+            if (!result1.isKeepOrigin()) {
+              keep[0] = false;
+              break;
+            }
           }
         }
-      }
 
-      @Override
-      public void processText(final @NotNull BuildMessage1 originalMessage) {
-        for (SimpleMessagesTranslator simpleMessagesTranslator : translators) {
-          final SimpleMessagesTranslator.Result result = simpleMessagesTranslator.doProcessText((String) originalMessage.getValue(), tail);
-          if (!result.isConsumed()) continue;
-          newMessages.addAll(result.getMessages());
-          if (!result.isKeepOrigin()) {
-            translated[0] = null;
-            break;
+        @Override
+        public void processText(final @NotNull BuildMessage1 originalMessage) {
+          for (SimpleMessagesTranslator simpleMessagesTranslator : translators) {
+            final SimpleMessagesTranslator.Result result1 = simpleMessagesTranslator.doProcessText((String) originalMessage.getValue(), tail);
+            if (!result1.isConsumed()) continue;
+            additional.addAll(result1.getMessages());
+            if (!result1.isKeepOrigin()) {
+              keep[0] = false;
+              break;
+            }
           }
         }
-      }
 
-      @Override
-      public void processParseException(final @NotNull ParseException e, final @NotNull BuildMessage1 originalMessage) {
-        LOG.warn("Invalid service message: " + originalMessage.getValue() + ", error: " + e.toString());
+        @Override
+        public void processParseException(final @NotNull ParseException e, final @NotNull BuildMessage1 originalMessage) {
+          LOG.warn("Invalid service message: " + originalMessage.getValue() + ", error: " + e.toString());
+        }
+      });
+      if (keep[0]) {
+        result.add(message);
       }
-    });
-
-    final ArrayList<BuildMessage1> result = new ArrayList<BuildMessage1>(newMessages.size() + 1);
-    if (translated[0] != null) {
-      result.add(translated[0]);
+      result.addAll(additional);
     }
-    result.addAll(newMessages);
     return result;
   }
 
@@ -188,5 +183,6 @@ public class TextBuildMessagesTranslator implements BuildMessagesTranslator {
     // TODO: Implement
     return Collections.emptyList();
   }
+
 
 }

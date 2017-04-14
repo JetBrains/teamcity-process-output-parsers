@@ -14,6 +14,9 @@ if (PluginVersion == null || "" == PluginVersion) {
 } else {
     version = "$PluginVersion"
 }
+if (PluginVersion == null || "" == PluginVersion) {
+    PluginVersion = "0.1-SNAPSHOT"
+}
 
 ext {
     teamcityDir = "$rootDir/servers/TeamCity-${TeamCityVersion}"
@@ -132,5 +135,5 @@ idea {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.14'
+    gradleVersion = '3.5'
 }

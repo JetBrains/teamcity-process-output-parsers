@@ -90,29 +90,27 @@ public class TextBuildMessagesTranslator implements BuildMessagesTranslator {
 
 
     for (BuildMessage1 message : messages) {
-      final boolean[] keep = {true};
-      final List<BuildMessage1> additional = new ArrayList<BuildMessage1>();
-
       ServiceMessagesProcessor.processTextMessage(message, new AbstractTextMessageProcessor() {
-        public void processServiceMessage(final @NotNull ServiceMessage serviceMessage, final @NotNull BuildMessage1 originalMessage) {
-          if (ServiceMessage.DISABLE.equals(serviceMessage.getMessageName())) {
+        public void processServiceMessage(final @NotNull ServiceMessage message, final @NotNull BuildMessage1 originalMessage) {
+          if (ServiceMessage.DISABLE.equals(message.getMessageName())) {
             mySuspendServiceMessages = true;
             return;
           }
-          if (ServiceMessage.ENABLE.equals(serviceMessage.getMessageName())) {
+          if (ServiceMessage.ENABLE.equals(message.getMessageName())) {
             mySuspendServiceMessages = false;
             return;
           }
           if (mySuspendServiceMessages) return;
 
           for (SimpleMessagesTranslator simpleMessagesTranslator : translators) {
-            final SimpleMessagesTranslator.Result result1 = simpleMessagesTranslator.doProcessMessage(serviceMessage, tail);
+            final SimpleMessagesTranslator.Result result1 = simpleMessagesTranslator.doProcessMessage(message, tail);
             if (!result1.isConsumed()) continue;
-            additional.addAll(result1.getMessages());
-            if (!result1.isKeepOrigin()) {
-              keep[0] = false;
-              break;
+            final List<BuildMessage1> additional = new ArrayList<BuildMessage1>();
+            if (result1.isKeepOrigin()) {
+              additional.add(originalMessage);
             }
+            additional.addAll(result1.getMessages());
+            result.addAll(additional);
           }
         }
 
@@ -121,11 +119,12 @@ public class TextBuildMessagesTranslator implements BuildMessagesTranslator {
           for (SimpleMessagesTranslator simpleMessagesTranslator : translators) {
             final SimpleMessagesTranslator.Result result1 = simpleMessagesTranslator.doProcessText((String) originalMessage.getValue(), tail);
             if (!result1.isConsumed()) continue;
-            additional.addAll(result1.getMessages());
-            if (!result1.isKeepOrigin()) {
-              keep[0] = false;
-              break;
+            final List<BuildMessage1> additional = new ArrayList<BuildMessage1>();
+            if (result1.isKeepOrigin()) {
+              additional.add(originalMessage);
             }
+            additional.addAll(result1.getMessages());
+            result.addAll(additional);
           }
         }
 
@@ -134,10 +133,6 @@ public class TextBuildMessagesTranslator implements BuildMessagesTranslator {
           LOG.warn("Invalid service message: " + originalMessage.getValue() + ", error: " + e.toString());
         }
       });
-      if (keep[0]) {
-        result.add(message);
-      }
-      result.addAll(additional);
     }
     return result;
   }

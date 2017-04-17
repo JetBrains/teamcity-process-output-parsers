@@ -51,7 +51,6 @@ public abstract class ParserCommand {
 
   public enum Scope {
     THIS_RUNNER("runner"),
-    NEXT_RUNNER("next-runner"), // TODO: Do we really need that?
     BUILD("build"),; // Build
 
     private final String myId;

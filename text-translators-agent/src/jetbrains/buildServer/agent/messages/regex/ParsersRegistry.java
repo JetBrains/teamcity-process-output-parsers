@@ -23,29 +23,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 public interface ParsersRegistry {
-  // TODO: Remove extra methods
-
-//  void enable(@NotNull ParserCommand.CommandWithParserIdentifier parser);
-//
-//  void disable(@NotNull ParserCommand.CommandWithParserIdentifier parser);
-//
-//  void enable(@NotNull ParserCommand.ParserId parser);
-//
-//  void disable(@NotNull ParserCommand.ParserId parser);
   void enable(@NotNull ParserCommand.ParserId parser, @Nullable ParserCommand.Scope scope);
   void disable(@NotNull ParserCommand.ParserId parser, @Nullable ParserCommand.Scope scope);
 
   void enable(@NotNull String name, @Nullable ParserCommand.Scope scope);
-
   void disable(@NotNull String name, @Nullable ParserCommand.Scope scope);
 
-
   void register(@NotNull String name, @NotNull RegexParser parser);
-
   void unregister(@NotNull String name);
 
   @NotNull
   Map<String, RegexParser> getRegisteredParsers();
 
-  @NotNull ParserLoader getLoader();
+  @NotNull
+  ParserLoader getLoader();
 }

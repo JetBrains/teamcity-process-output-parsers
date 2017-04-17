@@ -71,6 +71,7 @@ subprojects {
     publishing {
         publications {
             mavenJava(MavenPublication) {
+                version project.version
                 from components.java
                 artifact sourcesJar {
                     classifier "sources"

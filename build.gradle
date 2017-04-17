@@ -5,7 +5,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath group: 'com.github.rodm', name: 'gradle-teamcity-plugin', version: '0.9.1'
+        classpath group: 'com.github.rodm', name: 'gradle-teamcity-plugin', version: '1.0'
     }
 }
 
@@ -114,10 +114,11 @@ teamcity {
         }
 
         environments {
-            teamcity91 {
+            teamcity100 {
                 homeDir = file(teamcityDir)
                 dataDir = file(teamcityDataDir)
                 javaHome = file(teamcityJavaHome)
+
                 serverOptions '-Xdebug'
                 serverOptions '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5500'
                 serverOptions '-Dteamcity.oauthConnections.enabled=true'

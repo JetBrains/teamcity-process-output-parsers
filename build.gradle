@@ -39,7 +39,7 @@ allprojects {
     }
 
     if (!teamcityInstall) {
-        project.tasks.findByName("downloadTeamcity91")*.setEnabled(false)
+        project.tasks.findByName("downloadTeamcity100")*.setEnabled(false)
     }
 }
 

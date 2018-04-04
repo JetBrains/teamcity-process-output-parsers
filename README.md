@@ -1,4 +1,4 @@
-TeamCity Process Output Parsers Plugin
+TeamCity Process Output Parsers Plugin [![JetBrains team project](http://jb.gg/badges/team-flat-square.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
 =============
 
 Features
